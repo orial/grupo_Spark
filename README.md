@@ -1,6 +1,6 @@
 # Ingeniería y Ciencia de datos II
 
-## Projects
+## Projects
 
 * [I. Procesamiento]()
 * [II. Procesamiento]()
