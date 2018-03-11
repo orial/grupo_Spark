@@ -1,0 +1,30 @@
+{
+    "files.associations": {
+        "__bit_reference": "cpp",
+        "__hash_table": "cpp",
+        "__split_buffer": "cpp",
+        "bitset": "cpp",
+        "hash_map": "cpp",
+        "initializer_list": "cpp",
+        "iterator": "cpp",
+        "list": "cpp",
+        "string": "cpp",
+        "string_view": "cpp",
+        "unordered_map": "cpp",
+        "vector": "cpp",
+        "__config": "cpp",
+        "__nullptr": "cpp",
+        "exception": "cpp",
+        "new": "cpp",
+        "stdexcept": "cpp",
+        "typeinfo": "cpp",
+        "algorithm": "cpp",
+        "__locale": "cpp",
+        "system_error": "cpp",
+        "memory": "cpp",
+        "cassert": "cpp",
+        "ios": "cpp",
+        "sstream": "cpp"
+    },
+    "C_Cpp.intelliSenseEngineFallback": "Disabled"
+}
