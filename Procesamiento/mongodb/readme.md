@@ -10,8 +10,8 @@
 
 ## Importing csv
 * Descargamos csv desde la web:
-  * Forma 1: en consola escribimos  "mongoimport -d datascience -c incidents --type csv --file Incidents.csv --headerline"
-  * Forma 2: Hemos escrito un scripy en python2, load_data.py que realiza la misma funcion
+  * Forma 1: en consola escribimos  ```mongoimport -d datascience -c incidents --type csv --file Incidents.csv --headerline```
+  * Forma 2: Hemos escrito un script en python2, load_data.py que realiza la misma funcion
 
 ## Queries
 
