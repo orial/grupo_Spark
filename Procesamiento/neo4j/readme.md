@@ -12,6 +12,24 @@
 
 Steps to import csv
 
+Es necesario utilizar el query:
+```
+LOAD CSV WITH HEADERS FROM 'file:///SF_Crime_Heat_Map.csv' as line return line
+```
+Para importar los datos de CSV a la base de datos, sin embargo esto no genera nodos ni relaciones.
+
+También es importante recordar que el fichero ha de estar en la carpeta:
+
+```
+Application\neo4jDatabases\database-(numero)\installation-3.3.3\import
+```
+Pero se puede cambiar modificando el archivo neo4j.conf en la línea:
+
+```
+dbms.directories.import=import
+```
+
+Siendo "import" el directorio por defecto.
 ## Data structure
 
 ## Queries
