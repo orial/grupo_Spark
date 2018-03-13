@@ -16,7 +16,18 @@ Programa C++ que realice el mismo procesamiento directamente leyendo de fichero 
 ### Requirements
 
 * C++ environment
-* ...
+* Cassandra
+* Neo4j
+* Mongodb
+
+### Design
+
+Necesitamos diseñar para cada tipo de de base de datos para poder listar las siguientes consultas:
+
+* Número de incidencias por zona/dia
+* Número de incidencias por año/dia (por tipo de delito)
+* Frecuencia de incidencias por dia de la semana
+
 
 ### Getting started
 Como arrancamos el proyecto
@@ -24,6 +35,7 @@ Como arrancamos el proyecto
 ```shell
 $ run
 ```
+
 
 ## II. Análisis y representación
 
