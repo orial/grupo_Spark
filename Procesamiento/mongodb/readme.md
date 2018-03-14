@@ -60,6 +60,7 @@
      filepath = '~/Downloads/incid.csv'
      import_content(filepath)
  ``` 
+ ```
 ## Queries
 
 Necesitamos diseñar para cada tipo de de base de datos para poder listar las siguientes consultas:
