@@ -56,13 +56,13 @@ def import_content(filepath):
         # we free some memory as csv is not needed anymore ;)
         del partial_csv
         del csv_to_json
-
-
+```
+```
 if __name__ == "__main__":
     filepath = '~/Downloads/incid.csv'
     import_content(filepath)
   
-  ```
+```
 
 ## Queries
 
