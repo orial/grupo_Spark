@@ -63,7 +63,7 @@ En **RStudio** se importó el dataset al completo, reemplazando los valores nulo
 
 ```
 # R
-SF_Crime_Heat_Map <- read.csv("C:/Users/Melferas/Desktop/SF_Crime_Heat_Map.csv")
+SF_Crime_Heat_Map <- read.csv("C:/Users/Julio/Desktop/SF_Crime_Heat_Map.csv")
 View(SF_Crime_Heat_Map)
 missing <- SF_Crime_Heat_Map[complete.cases(SF_Crime_Heat_Map),]
 nrow(SF_Crime_Heat_Map) == nrow(missing)
