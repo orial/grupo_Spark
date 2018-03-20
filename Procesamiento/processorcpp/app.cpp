@@ -1,9 +1,9 @@
 #include <iostream>
-#include <string>
 #include <sstream>
+#include <fstream>
 #include <iterator>
+#include <string>
 #include <vector>
-#include <iterator>
 #include <cassert>
 
 using namespace std;
@@ -24,47 +24,86 @@ struct incident
   std::string location;
 };
 
+class Row {
+    public:
+        std::string const& operator[](std::size_t index) const
+        {
+            return _data[index];
+        };
+        std::size_t size() const
+        {
+            return _data.size();
+        };
+        void read(std::istream& str)
+        {
+            std::string line;
+            std::getline(str, line);
+
+            std::stringstream   lineStream(line);
+            std::string         cell;
+
+            _data.clear();
+            while(std::getline(lineStream, cell, '\t')) {
+                _data.push_back(cell);
+            }
+                
+            if (!lineStream && cell.empty()) {
+                _data.push_back("");
+            }
+        };
+    private:
+        std::vector<std::string> _data;
+
+};
+
+std::istream& operator>>(std::istream& str, Row& data)
+{
+    data.read(str);
+    return str;
+};
+
 class Incidents {
     public:
         Incidents();
-        incident from (std::string&);
+        void import(std::string filename);
+        incident const& operator[](std::size_t index) const
+        {
+            return _incidents[index];
+        };
+        std::size_t size() const
+        {
+            return _incidents.size();
+        };
+        std::vector<incident> filterBy(const char*, const char*);
     private:
         std::vector<std::string> split(const std::string&, char);
+        std::vector<incident> _incidents;
+        incident from(Row&);
 };
 
-// constructor
-Incidents::Incidents(void) {
-   cout << "Incidents is being created" << endl;
+std::string GetValueByAttribute(const char* attribute, incident& in)
+{
+    if (attribute == "category") return in.category;
+    if (attribute == "dayoftheweek") return in.dayoftheweek;
+    if (attribute == "location") return in.location;
+    if (attribute == "time") return in.time;
+    return "";
 }
 
-/**
-    Splits a line using delimiter into a vector of strings.
-    @param string
-    @param delimiter
-    @return a vector of string with the tokens created.
-*/
-std::vector<std::string> Incidents::split(const std::string& s, char delimiter)
+std::vector<incident> Incidents::filterBy(const char* attribute, const char* val)
 {
-   std::vector<std::string> tokens;
-   std::string token;
-   std::istringstream tokenStream(s);
-   while (std::getline(tokenStream, token, delimiter))
-   {
-      tokens.push_back(token);
-   }
-   return tokens;
+    std::vector<incident> filtered;
+    for(std::vector<incident>::iterator it = _incidents.begin(); it != _incidents.end(); ++it) {
+        std::string v = GetValueByAttribute(attribute,*it);
+        if (val == v){
+            filtered.push_back(*it);
+        }
+    }
+    return filtered;
 }
 
-/**
-    Returns a incident structure with the attributes parsed from line.
-    @param line to parse.
-    @return an incident structure.
-*/
-incident Incidents::from(std::string& line)
+incident Incidents::from(Row& attributes)
 {
-    std::vector<std::string> attributes;
-    attributes = split(line, '\t');
-    
     incident i;
     i.id = attributes[0];
     i.category = attributes[1];
@@ -80,15 +119,32 @@ incident Incidents::from(std::string& line)
     return i;
 }
 
+void Incidents::import(std::string filename)
+{
+    std::ifstream file(filename.c_str());
+    Row row;
+    while (file >> row) {
+        incident in = from(row);
+        _incidents.push_back(in);
+    }
+}
+// constructor
+Incidents::Incidents(void) {
+   cout << "Incidents is being created" << endl;
+}
+
 int main(int argc, char** argv) {
     if(argc < 2) {
         cerr << "insufficient args, usage: " << argv[0] << " filename" << endl;
         return 0;
-    } 
-    
-    Incidents incidents;
+    }
+
     std::string filename = argv[1];
-    std::string line = "176228847	LARCENY/THEFT	GRAND THEFT FROM LOCKED AUTO	Sunday	2017-09-03 20:10:00	TARAVAL	NONE	1400 Block of LA PLAYA ST	-122.50900403655304	37.759318345502706	(37.759318345502706, -122.50900403655304)";
-    incident in = incidents.from(line);
-    assert(in.id == "176228847");
+
+    Incidents incidents;
+    incidents.import(filename);
+    cout << "Incident:" << incidents[0].description  << endl;
+    std::vector<incident> byDay = incidents.filterBy("dayoftheweek", "monday");
+    cout << "Filtered Incident:" << byDay[0].description  << endl;
+    
 }
