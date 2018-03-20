@@ -68,6 +68,14 @@ From dasbhoard: [[http://kdm.dataview.org/kdm.jsp]]
 
 ## Queries
 
+Tablas requeridas para realizar las consultas:
+
+```
+CREATE TABLE incidencias.category (category text, cyclist_name text, flag int STATIC, PRIMARY KEY (country, cyclist_name));
+```
+
+
+
 Necesitamos diseñar para cada tipo de de base de datos para poder listar las siguientes consultas:
 
 * Número de incidencias por zona/dia
@@ -110,6 +118,8 @@ Edit DevCenter.app/Contents/devcenter.ini and add the line
 -vm
 /Library/Java/JavaVirtualMachines/jdk1.8.0_51.jdk/Contents/Home/bin
 ```
+
+
 
 
 
