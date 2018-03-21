@@ -48,7 +48,7 @@ IncidntNum, Category, Descript, DayOfWeek, Date, Time, PdDistrict, Resolution, A
 
 Se ha decidido realizar este diseño de nodos y relaciones:
 
-![alt text](https://image.ibb.co/gedhxx/nodos.jpg)
+![alt text](https://image.ibb.co/ncrBcx/Nodos.jpg)
 
 Dado que, a excepción de los incidentes, un gran número de elementos estaban duplicados, se ha procedido a crear sus propios nodos y a evitar su inserción múltiple. Los datos que podían causar la aparición doble de un mismo valor, como un distrito con mismo nombre pero coordenadas X e Y diferentes a las de otro mismo distrito, se han añadido a las relaciones entre los nodos de incidentes y el resto. Esto aumenta la eficiencia y rendimiento final tanto de la inserción como de las búsquedas futuras.
 
@@ -150,10 +150,16 @@ Que importaba los datos, creaba los nodos y sus relaciones en un tiempo de **3m2
 
 Necesitamos diseñar para cada tipo de de base de datos para poder listar las siguientes consultas:
 
-* Número de incidencias por zona/dia
+* Número de incidencias por día. **Count** es una función agregativa que reúne todas las entradas de un mismo tipo.
 
 ```
-select *
+MATCH (n:INCIDENT)-[r:TIME]->(d:DATE) return d,count(n)
+```
+
+* Número de incidencias por zona.
+
+```
+MATCH (n:INCIDENT)-[r:PLACE]->(d:DISTRICT) return distinct d,count(n)
 ```
 
 * Número de incidencias por año/dia (por tipo de delito)
