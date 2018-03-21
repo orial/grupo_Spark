@@ -52,6 +52,10 @@ Se ha decidido realizar este diseño de nodos y relaciones:
 
 Dado que, a excepción de los incidentes, un gran número de elementos estaban duplicados, se ha procedido a crear sus propios nodos y a evitar su inserción múltiple. Los datos que podían causar la aparición doble de un mismo valor, como un distrito con mismo nombre pero coordenadas X e Y diferentes a las de otro mismo distrito, se han añadido a las relaciones entre los nodos de incidentes y el resto. Esto aumenta la eficiencia y rendimiento final tanto de la inserción como de las búsquedas futuras.
 
+### Actualización
+
+Mientras que en el archivo sólo se guarda la fecha como cadena de caracteres en la columna *Date*, en el esquema aparecen tres campos: *Day*,*Month* y *Year*, los cuales serán obtenidos durante el siguiente apartado.
+
 ## Data formatting
 
 Aunque en primer lugar no era necesario, tras causar cierto error en __Cypher__ relacionado con la ausencia de una propiedad en una operación __MERGE__, se procedió a buscar el motivo de este fallo en el archivo *SF_Crime_Heat_Map.csv* descargado directamente de la fuente.
@@ -79,7 +83,29 @@ View(SF_data)
 write.csv(SF_data,"SF_Crime_Ordered_Map.csv")
 ```
 
-Que se utilizará para la carga de datos en el siguiente apartado.
+Que se utilizaría para la carga de datos en el siguiente apartado.
+
+### Actualización
+
+Sin embargo, encontramos un problemas con el formato actual. Este consiste en que el campo *Date* no nos proporciona acceso individual a cada variable (Día, mes y año). Obtener estas dividiendo la columna en una sentencia **cipher** aumenta de forma exponencial el tiempo de carga del CSV a la base de datos, por lo tanto es recomendable realizar esta operación anteriormente y modificar el archivo existente:
+
+```
+# Transformamos las columas del data.frame para poder operar sobre ellas.
+SF_Crime_Ordered_Map_2 <- data.frame(lapply(SF_Crime_Ordered_Map, as.character), stringsAsFactors=FALSE)
+# Usamos la librería stringr para mayor facilidad a la hora de separar la columna
+install.packages("stringr")
+library("stringr")
+
+# Almacenamos los tres vectores resultantes
+fechaSeparada <- str_split_fixed(SF_Crime_Ordered_Map_2$Date,'/',3)
+
+# Añadimos al data.frame original las nuevas columnas y lo exportamos
+SF_Crime_Ordered_Map$Day = fechaSeparada[,2]
+SF_Crime_Ordered_Map$Month <- fechaSeparada[,1]
+SF_Crime_Ordered_Map$Year <- fechaSeparada[,3]
+
+write.csv(SF_Crime_Ordered_Map, "SF_Crime_Ordered_Date_Map.csv", row.names = FALSE)
+```
 
 ## Loading data into Neo4J
 
@@ -105,7 +131,6 @@ Problema de esta sentencia:
 * Las sentencias MERGE buscan nodos con las mismas propiedades y labels antes de insertar lo que ralentiza la carga.
 * La sentencia completa intenta realizarse con la memoria RAM actual, con 2M de datos por procesar.
 
-
 Esto resultaba en errores de memoria o tiempos demasiado largos para la importación (una hora y media).
 
 Qué se hizo:
@@ -115,7 +140,9 @@ Qué se hizo:
   ```
   CREATE INDEX ON :INCIDENT(incidentNum);
   CREATE INDEX ON :CATEGORY(name);
-  CREATE INDEX ON :DATE(date);
+  CREATE INDEX ON :DATE(day);
+  CREATE INDEX ON :DATE(month);
+  CREATE INDEX ON :DATE(year);
   CREATE INDEX ON :RESOLUTION(name);
   CREATE INDEX ON :DISTRICT(name);
   ```
@@ -146,6 +173,31 @@ CREATE (i)-[t:TYPE]->(c),
 
 Que importaba los datos, creaba los nodos y sus relaciones en un tiempo de **3m20s**.
 
+### Actualización
+
+Para cargar los nuevos datos de día, mes y año, la query tuvo que cambiar a:
+
+```
+USING PERIODIC COMMIT 5000
+LOAD CSV WITH HEADERS FROM 'file:///SF_Crime_Ordered_Date_Map.csv' AS line 
+CREATE (i:INCIDENT {  incidentNum:toInteger(line.IncidntNum), description:line.Descript})
+MERGE (c:CATEGORY {  name: line.Category})
+MERGE (f:DATE {  day:toInteger(line.Day), month:toInteger(line.Month),year:toInteger(line.Year)})
+ON CREATE SET f.dayofweek = line.DayOfWeek
+MERGE (r:RESOLUTION { name: line.Resolution})
+MERGE (d:DISTRICT { name:line.PdDistrict})
+CREATE (i)-[t:TYPE]->(c),
+(i)-[p:PLACE { address:line.Address,  x:line.X,  y:line.Y}]->(d),
+(i)-[ti:TIME {time: line.Time}]->(f),
+(i)-[s:STATUS]->(r);
+```
+
+La cual es ciertamente más lenta, debido a que se han añadido tipados en **:INCIDENT** y **:DATE**, además de que el **MERGE** realizado en este segundo tipo de nodo debe comparar dos variables adicionales para no causar duplicidad, aumentando la duración de la carga a **14m**.
+
+#### *¿Por qué este cambio?*
+
+La subida de datos a servidor es algo que sólo se debe realizar una vez, por tanto es absolutamente más eficiente que tarde más este paso, que ralentizar las búsquedas teniendo que filtrar la fecha con comparadores de cadenas de caracteres en cada una.
+
 ## Queries
 
 Necesitamos diseñar para cada tipo de de base de datos para poder listar las siguientes consultas:
@@ -162,14 +214,17 @@ MATCH (n:INCIDENT)-[r:TIME]->(d:DATE) return d,count(n)
 MATCH (n:INCIDENT)-[r:PLACE]->(d:DISTRICT) return distinct d,count(n)
 ```
 
-* Número de incidencias por año/dia (por tipo de delito)
+* Número de incidencias por año/día (por tipo de delito)
 
 ```
-select *
+MATCH (n:INCIDENT)-->(s:DATE) return s,count(n); // Incidentes por día
+MATCH (n:INCIDENT)-->(s:DATE) return s.year,count(n) // Incidentes por año
+MATCH (c:CATEGORY)<--(n:INCIDENT)-->(s:DATE) return s.year,c.name,count(n) order by c.name // Incidentes y su tipo, por año
+MATCH (c:CATEGORY)<--(n:INCIDENT)-->(s:DATE) return s,c.name,count(n) order by c.name // Incidentes y su tipo, por día
 ```
-* Frecuencia de incidencias por dia de la semana
+* Frecuencia de incidencias por día de la semana
 
 ```
-select *
+MATCH (n:INCIDENT)-->(s:DATE) return s.dayofweek,s.year,count(n) order by s.dayofweek,s.year // Totales de incidentes los días de la semana de cada año
 ```
 
