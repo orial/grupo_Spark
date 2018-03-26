@@ -117,7 +117,8 @@ Esta fue la primera sentencia **Cypher** utilizada para cargar los datos.
 
 ```
 LOAD CSV WITH HEADERS FROM 'file:///SF_Crime_Ordered_Map.csv' AS line
-CREATE (i:INCIDENT {  incidentNum:toInt(line.IncidntNum), description:line.Descript})
+MERGE (i:INCIDENT {  incidentNum:toInt(line.IncidntNum)})
+SET ON CREATE i.description = line.Descript
 MERGE (c:CATEGORY {  name: line.Category})
 MERGE (f:DATE {  date: line.Date,  diaSemana: line.DayOfWeek})
 MERGE (r:RESOLUTION { name: line.Resolution})
@@ -159,7 +160,8 @@ Por tanto la sentencia final fue esta:
 ```
 USING PERIODIC COMMIT 5000
 LOAD CSV WITH HEADERS FROM 'file:///SF_Crime_Ordered_Map.csv' AS line
-CREATE (i:INCIDENT {  incidentNum:line.IncidntNum, description:line.Descript})
+MERGE (i:INCIDENT {  incidentNum:toInt(line.IncidntNum)})
+SET ON CREATE i.description = line.Descript
 MERGE (c:CATEGORY {  name: line.Category})
 MERGE (f:DATE {  date: line.Date})
 ON CREATE SET f.dayofweek = line.DayOfWeek
@@ -180,7 +182,8 @@ Para cargar los nuevos datos de día, mes y año, la query tuvo que cambiar a:
 ```
 USING PERIODIC COMMIT 5000
 LOAD CSV WITH HEADERS FROM 'file:///SF_Crime_Ordered_Date_Map.csv' AS line 
-CREATE (i:INCIDENT {  incidentNum:toInteger(line.IncidntNum), description:line.Descript})
+MERGE (i:INCIDENT {  incidentNum:toInt(line.IncidntNum)})
+SET ON CREATE i.description=line.Descript
 MERGE (c:CATEGORY {  name: line.Category})
 MERGE (f:DATE {  day:toInteger(line.Day), month:toInteger(line.Month),year:toInteger(line.Year)})
 ON CREATE SET f.dayofweek = line.DayOfWeek
@@ -192,7 +195,7 @@ CREATE (i)-[t:TYPE]->(c),
 (i)-[s:STATUS]->(r);
 ```
 
-La cual es ciertamente más lenta, debido a que se han añadido tipados en **:INCIDENT** y **:DATE**, además de que el **MERGE** realizado en este segundo tipo de nodo debe comparar dos variables adicionales para no causar duplicidad, aumentando la duración de la carga a **14m**.
+La cual es ciertamente más lenta, debido a que se han añadido tipados en **:INCIDENT** y **:DATE**, además de que el **MERGE** realizado en este segundo tipo de nodo debe comparar dos variables adicionales para no causar duplicidad, aumentando la duración de la carga a **12m49s**.
 
 #### *¿Por qué este cambio?*
 
