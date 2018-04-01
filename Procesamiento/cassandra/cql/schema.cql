@@ -100,35 +100,3 @@ COPY incidents.overall (year, category, incidentId, subid, address, district, da
 TO 'tmp_incidents_by_category.csv';
 COPY incidents.bycategory(year, category, incidentId, subid, address, district, dayoftheweek, description, location, resolution, time, month, day, hour,x,y) 
 FROM 'tmp_incidents_by_category.csv';
-
-
-
-
-/* junk data */
-
-CREATE TABLE if not exists incidents.byyeardistrict (
-    year int,
-    district text,
-    incidentId bigint,
-    subid bigint,
-    address text,
-    category text,
-    dayoftheweek text,
-    description text,
-    location text,
-    resolution text,
-    time timestamp,
-    month int,
-    day int,
-    hour int,
-    x text,
-    y text,
-    PRIMARY KEY ((year,district), time, month, day, hour)
-) WITH CLUSTERING ORDER BY (time DESC, month DESC, day DESC,hour DESC);
-CREATE INDEX bydistrict_index_year_district ON incidents.byyeardistrict (year);
-
-/* Importing dataset from original table */
-COPY incidents.overall (year, district, incidentId, subid, address, category, dayoftheweek, description, location, resolution, time, month, day, hour,x,y) 
-TO 'tmp_incidents_by_district.csv';
-COPY incidents.byyeardistrict(year, district, incidentId, subid, address, category, dayoftheweek, description, location, resolution, time, month, day, hour,x,y) 
-FROM 'tmp_incidents_by_district.csv';
