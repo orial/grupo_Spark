@@ -2,17 +2,17 @@
 
 Representación y modelado de datos de actividades criminales con respecto a localizaciones o por periodos de tiempo entre los años 2003 y 2018 mediante Cassandra.
 
-* [Introducción]
+* [Introducción](#introducción)
 * *Modelado de datos*
-  * [Almacenamiento de datos]
-  * [Estructura de datos]
-  * [Consultas]
+  * [Almacenamiento de datos](#almacenamiento-de-datos)
+  * [Estructura de datos](#estructura-de-datos)
+  * [Consultas](#consultas)
     * Ver actividad criminal en un periodo de tiempo
     * Ver actividad criminal en una zona de la ciudad
     * Agregados por periodos de tiempo
     * Agregadps por zona o tipo caso
-* [Configuracion e instalación]
-* [Procesamiento de datos]
+* [Configuracion e instalación](#configuration-e-instalación)
+* [Procesamiento de datos](#procesamiento-de-datos)
 
 ---
 ## Introducción
@@ -88,6 +88,44 @@ La visualización de la actividad criminal se consigue mediante la representaci�
 
 ### Ver actividad criminal en un periodo de tiempo
 
+La actividad es ofrecida por la tabla: _incidents.overall_, con la estructura:
+
+|  |   |
+| ------- | --- |
+| Partition keys | incidentId:subid)|
+| Clustering key | time |
+
+La información se encuentra particionada por una clave primaria compuesta por las claves incidencia y delito; pero al añadir el campo _time_ como clave de clusterización podemos realizar una búsqueda por periodo sin distinguir año. No se podría considerar una consulta muy eficiente ya que no se aprovecha las ventajas de particionamiento con respecto a la condición de búsqueda.
+
+```
+CREATE TABLE incidents.overall (
+    incidentid bigint,
+    subid bigint,
+    time timestamp,
+    ...
+PRIMARY KEY ((incidentid, subid), time)
+) WITH CLUSTERING ORDER BY (time DESC);
+```
+
+* Obtener toda las incidencias para un periodo de tiempo. 
+
+```
+select * from incidents.overall
+where time >= '2014-01-01 00:00:00' and time <= dateof(now())
+allow filtering;
+```
+
+![](../docs/cassandra/queries/query_overall_periodtime.png)
+
+* Información relacionada con una incidencia en concreto
+
+```
+select * from incidents.overall 
+where incidentId = 150098373 
+allow filtering;
+```
+![](../docs/cassandra/queries/query_getincident.png)
+
 ### Ver actividad criminal en una zona de la ciudad
 
 ### Agregados por periodos de tiempo
@@ -121,7 +159,7 @@ o una vez descargado el dataset en 'incidents.raw.tsv' con las 2 millones de ent
  $ nice cat incidents.raw.tsv |tail -n +2 | tr '\t' ';' | sed -E 's/([0-9]+)\/([0-9]+)\/([0-9]+);([0-9]+):([0-9]+)/\3-\1-\2 \4:\5:00;\2;\3;\1;\4/g' > incidents.dataset.csv
  ```
 
-Una muestra del resultado la podemos encontrar en el fichero [incidents.dataset.sample.100.tsv](dataset/incidents.dataset.sample.100.tsv) generado a partir del original [incidents.raw.sample.100.tsv](dataset/incidents.raw.sample.100.tsv).
+Una muestra del resultado la podemos encontrar en el fichero [incidents.dataset.sample.100.tsv](../dataset/incidents.dataset.sample.100.tsv) generado a partir del original [incidents.raw.sample.100.tsv](../dataset/incidents.raw.sample.100.tsv).
 
 ```
 ...
