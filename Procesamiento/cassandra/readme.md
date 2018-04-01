@@ -176,7 +176,7 @@ Obtener número de incidencias producidas de cierta categoria (por un determinad
  where year = ?
  group by category;
 ```
-![](../docs/cassandra/queries/query_bycategory_groupby_withoutfilter.png)
+![](../docs/cassandra/queries/query_bycategory_groupby_withoutfilter2.png)
 
 * Añadiendo filtro para añadir la condición de filtrar por mes
 ```
@@ -186,7 +186,7 @@ Obtener número de incidencias producidas de cierta categoria (por un determinad
  group by category
  allow filtering;
 ```
-![](../docs/cassandra/queries/query_bycategory_groupby_with_filter.png)
+![](../docs/cassandra/queries/query_bycategory_groupby_with_filter2.png)
 
 
 [_volver_](#cassandra)
