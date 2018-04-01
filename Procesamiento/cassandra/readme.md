@@ -69,9 +69,9 @@ Hay dos metas importantes a tener en cuenta para el modelado de datos en *Cassan
 
 ![](../docs/modelodatos.png)
 
-![](../docs/modelodatosraw.png)
+Dado que el modelo de datos se hace en acorde a las sentencias y no sobre las entidades o relaciones, no se requiere de un diseño alejado de la representación natural. En tal caso, se tendrá en cuenta la representación actual de las incidencias pero se hará para distintos escenarios (esquemas) en acorde a cada sentencia requerida.
 
-Dado que el modelo de datos se hace en acorde a las sentencias y no sobre las entidades o relaciones, no se requiere de un diseño alejado de la forma natural representada en los datos mencionados. En tal caso, se tendrá en cuenta la representación actual de las incidencias pero para distintos escenarios por cada sentencia requerida.
+![](../docs/modelodatosraw.png)
 
 *Identificar sentencias*. La mejor manera de particionar las lecturas es modelar los datos en acorde a las sentencias, que son dadas por los requisitos. De primera instancia hay que considerar los siguientes puntos antes de realizar la definición de las sentencias:
 
@@ -97,10 +97,10 @@ La actividad es ofrecida por la tabla: _incidents.overall_, con la estructura:
 
 |  |   |
 | ------- | --- |
-| Partition keys | incidentId:subid)|
-| Clustering key | time |
+| Partition keys | _incidentId:subid_|
+| Clustering key | _time_ |
 
-La información se encuentra particionada por una clave primaria compuesta por las claves incidencia y delito; pero al añadir el campo _time_ como clave de clusterización podemos realizar una búsqueda por periodo sin distinguir año. No se podría considerar una consulta muy eficiente ya que no se aprovecha las ventajas de particionamiento con respecto a la condición de búsqueda.
+La información se encuentra particionada por una clave primaria compuesta de las claves _incidencia_ y _delito_; pero al añadir el campo _time_ como clave de clusterización podemos realizar una búsqueda por periodo sin distinguir año. No se podría considerar una consulta muy eficiente ya que no se aprovecha las ventajas de particionamiento con respecto a la condición de búsqueda.
 
 ```
 CREATE TABLE incidents.overall (
@@ -133,9 +133,61 @@ allow filtering;
 
 ### Ver actividad criminal en una zona de la ciudad
 
-### Agregados por periodos de tiempo
+Para esta sentencia si se realiza una partición de datos adecuada, con respecto a la zona y año: _district:year_.
 
-### Agregadps por zona o tipo caso
+* Obtener información de incidencias por zonas (para un determinado año)
+```
+ select district, year, incidentid, category, time, location 
+ from incidents.bydistrict 
+ where year = ?
+```
+![](../docs/cassandra/queries/query_bydistrict_incidents_year_2015.png)
+
+Si queremos añadir condicion de periodo de tiempo, necesitamos añadir filtering:
+
+```
+ select district, year, incidentid, category, time, location 
+ from incidents.bydistrict 
+ where year = 2015 and time >= '2015-02-01 00:00:00' and time <= dateof(now())
+ allow filtering;
+```
+
+### Visualizar incidencias de una actividad criminal de cierta índole
+
+Para esta sentencia si se realiza una partición de datos adecuada, con respecto al tipo de incidencia y año: _category:year_.
+
+* Obtener información de incidencias por categorias (para un determinado año)
+```
+ select category, year, incidentid, category, time, location 
+ from incidents.bycategory 
+ where year = ? 
+```
+![](../docs/cassandra/queries/query_bydistrict_incidents_year_2015.png)
+
+
+### Agregado por actividad y tiempo
+
+Obtener número de incidencias producidas de cierta categoria (por un determinado año)
+
+* Sin añadir filtro, más eficiente.
+```
+ select category, year, count(*) 
+ from incidents.bycategory 
+ where year = ?
+ group by category;
+```
+![](query_bycategory_groupby_withoutfilter.png)
+
+* Añadiendo filtro para añadir la condición de filtrar por mes
+```
+ select category, year, count(*) 
+ from incidents.bycategory 
+ where year = 2015 and month = 1
+ group by category
+ allow filtering;
+```
+![](query_bycategory_groupby_with_filter.png)
+
 
 [_volver_](#cassandra)
 
