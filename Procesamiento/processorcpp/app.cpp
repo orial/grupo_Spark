@@ -1,8 +1,12 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
+#include <map>
+#include <set>
 #include <iterator>
 #include <string>
+#include <utility>
+#include <algorithm>
 #include <vector>
 #include <cassert>
 
@@ -75,7 +79,14 @@ class Incidents {
             return _incidents.size();
         };
         std::vector<incident> filterBy(const char*, const char*);
+        std::map<std::string, vector<incident> > getByDistrict();
+        std::map<std::string, vector<incident> > getByCategory();
+        /*std::vector<incident> Incidents::getByCategory();
+        std::vector<incident> Incidents::getOverallByPeriod(const char* from, const char* to);
+        std::vector<incident> Incidents::getDistrictsByPeriod(const char* from, const char* to);
+        std::vector<incident> Incidents::getCategoriesByPeriod(const char* from, const char* to);*/
     private:
+        std::map<std::string, vector<incident> > getByAttribute(const char * attribute);
         std::vector<std::string> split(const std::string&, char);
         std::vector<incident> _incidents;
         incident from(Row&);
@@ -87,6 +98,7 @@ std::string GetValueByAttribute(const char* attribute, incident& in)
     if (attribute == "dayoftheweek") return in.dayoftheweek;
     if (attribute == "location") return in.location;
     if (attribute == "time") return in.time;
+    if (attribute == "district") return in.place;
     return "";
 }
 
@@ -94,12 +106,40 @@ std::vector<incident> Incidents::filterBy(const char* attribute, const char* val
 {
     std::vector<incident> filtered;
     for(std::vector<incident>::iterator it = _incidents.begin(); it != _incidents.end(); ++it) {
-        std::string v = GetValueByAttribute(attribute,*it);
-        if (val == v){
-            filtered.push_back(*it);
-        }
+        
+        std::string value = GetValueByAttribute(attribute,*it);
+        std::transform(value.begin(), value.end(), value.begin(), ::tolower);
+        if (val == value) filtered.push_back(*it);
     }
     return filtered;
+}
+
+std::map<std::string, vector<incident> > Incidents::getByDistrict()
+{
+    return getByAttribute("district");
+}
+
+std::map<std::string, vector<incident> > Incidents::getByCategory()
+{
+    return getByAttribute("category");
+}
+
+std::map<std::string, vector<incident> > Incidents::getByAttribute(const char* attribute)
+{
+    std::map<std::string, vector<incident> > byAttribute;
+    std::vector<incident> filtered;
+    std::string attr;
+    for(std::vector<incident>::iterator it = _incidents.begin(); it != _incidents.end(); ++it) {
+        attr = GetValueByAttribute(attribute,*it);
+        std::transform(attr.begin(), attr.end(), attr.begin(), ::tolower);
+
+        if (byAttribute.count(attr) == 0){
+            byAttribute[attr] = std::vector<incident>();
+        }
+        byAttribute[attr].push_back(*it);
+    }
+    cout << "Incidents groups:" << byAttribute.size() << endl;
+    return byAttribute;
 }
 
 incident Incidents::from(Row& attributes)
@@ -130,8 +170,27 @@ void Incidents::import(std::string filename)
 }
 // constructor
 Incidents::Incidents(void) {
-   cout << "Incidents is being created" << endl;
 }
+
+void exportDistrictsCount(Incidents incidents, const char* filename)
+{
+    std::ofstream out(filename);
+    std::map<std::string, vector<incident> > byDistrict  = incidents.getByDistrict();
+    for (map<string, vector<incident> >::iterator it = byDistrict.begin(); it!= byDistrict.end(); it++){
+        out << it->first << "\t" << it->second.size() << "\n";
+    }
+    out.close();
+};
+
+void exportCategoryCount(Incidents incidents, const char* filename)
+{
+    std::ofstream out(filename);
+    std::map<std::string, vector<incident> > byType  = incidents.getByCategory();
+    for (map<string, vector<incident> >::iterator it = byType.begin(); it!= byType.end(); it++){
+        out << it->first << "\t" << it->second.size() << "\n";
+    }
+    out.close();
+};
 
 int main(int argc, char** argv) {
     if(argc < 2) {
@@ -143,8 +202,13 @@ int main(int argc, char** argv) {
 
     Incidents incidents;
     incidents.import(filename);
-    cout << "Incident:" << incidents[0].description  << endl;
+    cout << "First Incident:" << incidents[0].description  << endl;
     std::vector<incident> byDay = incidents.filterBy("dayoftheweek", "monday");
-    cout << "Filtered Incident:" << byDay[0].description  << endl;
-    
+    cout << "First occurence of Filtered Incident by dayoftheweek:" << byDay[0].description << "," <<  byDay[1].dayoftheweek << endl;
+
+    cout << "\nExporting incidents count by district into filename: " << "incidentsByDistrict.tsv ..." << endl;
+    exportDistrictsCount(incidents, "incidentsByDistrict.tsv");
+
+    cout << "\nExporting incidents count by category into filename: " << "incidentsByCategory.tsv ..." << endl;
+    exportCategoryCount(incidents, "incidentsByCategory.tsv");
 }

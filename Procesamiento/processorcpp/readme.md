@@ -1,16 +1,17 @@
-# Processor
+# CPPProcessor
 
-## How to compile and build using Visual Studio Code
+The application ```processor``` will export stats information into few files with the calculated information based on imported source TSV file
+passed as argument:
 
-This is a sample debuggable C++ project. It uses the vendor provided version of clang installed. `tasks.json` and `launch.json` have been edited to demonstrate how to create a configuration for a C++ project that builds with clang.
+* Incidents count by categories: _indicentsByCategory.tsv_
+* Incidents count by districts:  _indicentsByDistrict.tsv_
 
-There's a sample build task in `.vscode/tasks.json`; you can also see the build configurations by using the menu option `Configure` -> `Configure Tasks` or by clicking the gear icon in the Debug Panel.
+## Getting started
 
-To run a build, use the menu option `Tasks` -> `Run Build Task...`.
-
-There's a sample debug configuration in `.vscode/launch.json`; you can also see the configuration by using the menu option `Debug` -> `Open Configurations`.
-
-To debug the build, use the menu option `Debug` -> `Start Debugging`. The executable will launch and stop in the main function.
+```
+$ g++ -g -o processor app.cpp
+$ ./processor sample.tsv
+```
 
 ## References
 * C++ Concurrency in action (Chapter 8) [book](http://www.bogotobogo.com/cplusplus/files/CplusplusConcurrencyInAction_PracticalMultithreading.pdf)
@@ -19,5 +20,5 @@ To debug the build, use the menu option `Debug` -> `Start Debugging`. The execut
 https://stackoverflow.com/questions/15701015/split-and-process-a-string-in-c-into-different-variables
 
 
-# Contributors
+## Contributors
 * Álvaro vrandkode@gmail.com
