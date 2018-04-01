@@ -13,6 +13,37 @@ $ g++ -g -o processor app.cpp
 $ ./processor sample.tsv
 ```
 
+## How to use
+
+```
+$ ./processor sample.tsv
+First Incident:GRAND THEFT FROM LOCKED AUTO
+First occurence of Filtered Incident by dayoftheweek:GRAND THEFT FROM LOCKED AUTO,Monday
+
+Exporting incidents count by district into filename: incidentsByDistrict.tsv ...
+Incidents groups:6
+
+Exporting incidents count by category into filename: incidentsByCategory.tsv ...
+Incidents groups:1
+```
+
+It returns two files with the information processed:
+
+_incidentsByDistrict.tsv_
+```
+bayview	    1
+central	    1
+ingleside	1
+mission	    2
+northern	2
+southern	3
+```
+
+_incidentsByCategory.tsv_
+```
+larceny/theft	10
+```
+
 ## References
 * C++ Concurrency in action (Chapter 8) [book](http://www.bogotobogo.com/cplusplus/files/CplusplusConcurrencyInAction_PracticalMultithreading.pdf)
 
