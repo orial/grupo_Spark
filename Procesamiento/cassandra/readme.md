@@ -235,125 +235,20 @@ A partir de aquí se procede al volcado de datos a una tabla de índole general
 
 # Configuracion e instalación
 
-## Requerimientos
-
-* Cassandra 
-* hsqlc
-
-## Installation
 * Download cassandra
-* Run ./cassandra
-
-
-
-
-
-## Importing Incidents data
-
-* Downloading the Incidents dataset from _TSV for Excel_ version from https://data.sfgov.org/Public-Safety/Map-of-Police-Department-Incidents/gxxq-x39z and clean data before importing: removing the headers, transform and merge the date/time into time field. The results will be saved under incidents.tsv
-
-
-*[Change Notice 03/13/2018]: By the end of this month, this dataset will become historical and a new one will be created starting with incident data in 2018. This one will remain here, but no longer be updated. The new one will have data coming from a new system, will not have a 2 week lag, and have updated districts among other quality improvements. We will attach a guide here with more detailed change updates as soon as we have them.*
-
 ```
-wget -O- "https://data.sfgov.org/api/views/tmnf-yvry/rows.tsv?accessType=DOWNLOAD&api_foundry=true" |tail -n +2|sed -E 's/([0-9]+)\/([0-9]+)\/([0-9]+) ([0-9\:]+) [A-M]+.([0-9\:]+)/\3-\1-\2 \5:00/g' > incidents.tsv
+$ wget http://apache.rediris.es/cassandra/3.11.2/apache-cassandra-3.11.2-bin.tar.gz
+$ tar -xvf apache-cassandra-3.11.2-bin.tar.gz
 ```
+* Running cassandra server:
 ```
-wget -O- "https://data.sfgov.org/api/views/tmnf-yvry/rows.tsv?accessType=DOWNLOAD&api_foundry=true"|tail -n +2|tr '\t' ';' | sed -E 's/([0-9]+)\/([0-9]+)\/([0-9]+);([0-9\:]+[0-9]+)/\3-\1-\2 \4:00;\2;\3;\1/g' | sed -E "s/;[0-9]+$/;`uuidgen | tr '[:upper:]' '[:lower:]'`/g" | sed -E 's/ ([0-9]+):([0-9]+):([0-9]+);/ \1:\2:\3;\1;/g' > incidents-with-uid.c
+./apache-cassandra-3.11.2/bin/cassandra
+```
+* Running CQL shell:
+```
+./apache-cassandra-3.11.2/bin/cqlsh
 ```
 
-wget -O- "https://data.sfgov.org/api/views/tmnf-yvry/rows.tsv?accessType=DOWNLOAD&api_foundry=true" | tr '\t' ';' | sed -E 's/([0-9]+)\/([0-9]+)\/([0-9]+);([0-9]+):([0-9]+)/\3-\1-\2 \4:\5:00;\2;\3;\1;\4/g' > incidents.raw_data.csv
-
-## Design notes
-
-Data on each node according to the value of the partition key and the range that the node is responsible for.
-
-The correct way to model this is to first find a different column by which to partition the data
-
-Queries will return data that is sorted according to the clustering key(s) only when a partition key is also specified.  Without a partition key specified in the WHERE clause, the actual order of the result set then becomes dependent on the hashed values of primary key.
-
-For tables supporting queries for recent, time-based data, you may want to specify a “DESCending” sort direction in your table definition.
-
-
-
-* Creating keyspace (use _DevCenter_ or cql shell ```./datastax-ddc-3.9.0/bin/cqlsh```)
-```
-CREATE KEYSPACE incidents
-WITH replication = {'class': 'SimpleStrategy',
-'replication_factor' : 1};
-```
-
-* Create incidents table
-```
-CREATE TABLE IF NOT EXISTS incidents (
-  id text PRIMARY KEY,
-  category text,
-  description ascii,
-  dayoftheweek text,
-  time timestamp,
-  district text,
-  resolution text,
-  address text,
-  x text,
-  y text,
-  location text
-);
-```
-
-* Check if keyspace was created
-```
-cqlsh> describe keyspaces;
-
-delitos        system_auth  incidents           system_traces
-system_schema  system       system_distributed  personas
-```
-
-* Import data to table incidents
-```
-cqlsh> COPY incidents(id, category, description, dayoftheweek, time, district, resolution, address,x,y,location) 
-FROM 'dataset/incidents.tsv' 
-WITH DELIMITER='\t' and CHUNKSIZE=500 and INGESTRATE=2000 and HEADER=false and DATETIMEFORMAT='%Y-%m-%d %H:%M:%S';
-```
-
-```
-Processed: 25210 rows; Rate:    1094 rows/s; Avg. rate:    2024 rows/s
-25210 rows imported from 1 files in 12.453 seconds (0 skipped).
-```
-
----
-
-### Data modeling
-
-From dasbhoard: [[http://kdm.dataview.org/kdm.jsp]]
-
-## Queries
-
-Tablas requeridas para realizar las consultas:
-
-```
-CREATE TABLE incidencias.category (category text, cyclist_name text, flag int STATIC, PRIMARY KEY (country, cyclist_name));
-```
-
-
-
-Necesitamos diseñar para cada tipo de de base de datos para poder listar las siguientes consultas:
-
-* Número de incidencias por zona/dia
-
-```
-select *
-```
-
-* Número de incidencias por año/dia (por tipo de delito)
-
-```
-select *
-```
-* Frecuencia de incidencias por dia de la semana
-
-```
-select *
-```
 ---
 References:
 
