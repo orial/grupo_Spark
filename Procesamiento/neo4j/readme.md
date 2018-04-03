@@ -182,8 +182,8 @@ Para cargar los nuevos datos de día, mes y año, la query tuvo que cambiar a:
 ```
 USING PERIODIC COMMIT 5000
 LOAD CSV WITH HEADERS FROM 'file:///SF_Crime_Ordered_Date_Map.csv' AS line 
-MERGE (i:INCIDENT {  incidentNum:toInt(line.IncidntNum)})
-SET ON CREATE i.description=line.Descript
+MERGE (i:INCIDENT {  incidentNum:toInteger(line.IncidntNum)})
+ON CREATE SET i.description=line.Descript
 MERGE (c:CATEGORY {  name: line.Category})
 MERGE (f:DATE {  day:toInteger(line.Day), month:toInteger(line.Month),year:toInteger(line.Year)})
 ON CREATE SET f.dayofweek = line.DayOfWeek
