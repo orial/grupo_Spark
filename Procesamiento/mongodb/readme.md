@@ -125,4 +125,4 @@ Ejemplos de consultas:
   ![](../docs/frecuencia.png)
   
 ## Referencias
-* Manipulación de datos en MongoDB mediante Aggregation Pipeline.
+* [Manipulación de datos en MongoDB mediante Aggregation Pipeline](https://www.adictosaltrabajo.com/tutoriales/mongodb-agregatte/)
