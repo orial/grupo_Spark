@@ -118,7 +118,9 @@ Ejemplos de consultas:
   ```
 * Frecuencia de incidencias por dia de la semana
 
-```
-select *
-```
+  ```
+  db.incidents.find({Date:/2013/,Category:"ROBBERY"}).pretty()
+  ```
+  ![](../docs/frecuencia.PNG)
+  
 
