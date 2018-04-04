@@ -65,9 +65,9 @@
 Necesitamos diseñar para cada tipo de base de datos para poder listar las siguientes consultas:
 
 * Número de incidencias por zona/dia
-
+** Incidencias en Sunday
 ```
-select *
+db.find({DayOfWeek:"Sunday"}).pretty()
 ```
 
 * Número de incidencias por año/dia (por tipo de delito)
