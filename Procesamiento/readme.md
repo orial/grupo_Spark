@@ -53,10 +53,10 @@ $ wget -O incidents.raw.tsv \
 La limpieza de datos se ha hecho en acorde al modelo de datos requerido para Cassandra,  Neo4j o Mongodb; pero en general se han recuperado la mayoría de las columnas. 
 
 
-* [Neo4j](/neo4j/readme.md#preprocesamiento-e-importación-de-datos)
-* [Mongodb](/mongodb/readme.md#preprocesamiento-e-importación-de-datos)
-* [Cassandra](/cassandra/readme.md#preprocesamiento-e-importación-de-datos)
-* [Processorcpp](/processorcpp/readme.md#preprocesamiento-e-importación-de-datos)
+* [Neo4j](neo4j/readme.md#preprocesamiento-e-importación-de-datos)
+* [Mongodb](mongodb/readme.md#preprocesamiento-e-importación-de-datos)
+* [Cassandra](cassandra/readme.md#preprocesamiento-e-importación-de-datos)
+* [Processorcpp](processorcpp/readme.md#preprocesamiento-e-importación-de-datos)
 
 
 ## Estructura de datos
@@ -64,10 +64,10 @@ La limpieza de datos se ha hecho en acorde al modelo de datos requerido para Cas
 La estructura de datos se he conservado de forma homogénea para cada tipo de motor, con el dato común de utilización de un formato de fecha fusionado en un solo campo. Tenemos las siguientes implementaciones del modelo de datos:
 
 
-* [Neo4j](/neo4j/readme.md#estructura-de-datos)
-* [Mongodb](/mongodb/readme.md#estructura-de-datos)
-* [Cassandra](/cassandra/readme.md#estructura-de-datos)
-* [Processorcpp](/processorcpp/readme.md#estructura-de-datos)
+* [Neo4j](neo4j/readme.md#estructura-de-datos)
+* [Mongodb](mongodb/readme.md#estructura-de-datos)
+* [Cassandra](cassandra/readme.md#estructura-de-datos)
+* [Processorcpp](processorcpp/readme.md#estructura-de-datos)
 
 
 ## Consultas
@@ -81,7 +81,7 @@ Hemos generalizado los tipos de consultas dependendiendo a las expectativas sobr
 
 Todas se pueden encontrar implementadas bajo:
 
-* [Neo4j](/neo4j/readme.md#consultas)
-* [Mongodb](/mongodb/readme.md#consultas)
-* [Cassandra](/cassandra/readme.md#consultas)
-* [Processorcpp](/processorcpp/readme.md#consultas)
+* [Neo4j](neo4j/readme.md#consultas)
+* [Mongodb](mongodb/readme.md#consultas)
+* [Cassandra](cassandra/readme.md#consultas)
+* [Processorcpp](processorcpp/readme.md#consultas)
