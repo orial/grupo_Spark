@@ -121,6 +121,6 @@ Ejemplos de consultas:
   ```
   db.incidents.find({Date:/2013/,Category:"ROBBERY"}).pretty()
   ```
-  ![](../docs/frecuencia.PNG)
+  ![](../docs/frecuencia.png)
   
 
