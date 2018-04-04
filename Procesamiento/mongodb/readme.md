@@ -106,9 +106,16 @@ Ejemplos de consultas:
   
 * Número de incidencias por año/dia (por tipo de delito)
 
-```
-select *
-```
+  * Incidencias en el año 2013 para los delitos ROBBERY
+  ```
+  db.incidents.find({Date:/2013/,Category:"ROBBERY"}).pretty()
+  ```
+  ![](../docs/2013ROBBERY.PNG)
+  * Número de incidencias de la busqueda anterior
+  ```
+   db.incidents.count({Address:/LEAVENWORTH/}})
+   28163
+  ```
 * Frecuencia de incidencias por dia de la semana
 
 ```
