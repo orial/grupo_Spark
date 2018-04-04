@@ -69,7 +69,7 @@ Necesitamos diseñar para cada tipo de base de datos para poder listar las sigui
 ```
 db.find({DayOfWeek:"Sunday"}).pretty()
 ```
-
+[](../docs/map.png)
 * Número de incidencias por año/dia (por tipo de delito)
 
 ```
