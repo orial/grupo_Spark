@@ -66,10 +66,15 @@ Necesitamos diseñar para cada tipo de base de datos para poder listar las sigui
 
 * Número de incidencias por zona/dia
   * Incidencias en dia Sunday
-```
-db.find({DayOfWeek:"Sunday"}).pretty()
-```
-![](../docs/sunday.PNG)
+  ```
+  db.find({DayOfWeek:"Sunday"}).pretty()
+  ```
+  ![](../docs/sunday.PNG)
+  * Incidencias en el dia 02/01/2015
+  ```
+  db.find({Date:"02/01/2015"}).pretty()
+  ```
+  ![](../docs/02012015.PNG)
 * Número de incidencias por año/dia (por tipo de delito)
 
 ```
