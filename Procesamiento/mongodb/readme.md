@@ -119,8 +119,9 @@ Ejemplos de consultas:
 * Frecuencia de incidencias por dia de la semana
 
   ```
-  db.incidents.find({Date:/2013/,Category:"ROBBERY"}).pretty()
+  db.incidents.aggregate([{$group:{day:"$DayOfWeek",num:{$sum:1}}}])
   ```
+  ![](../docs/dias.png)
   ![](../docs/frecuencia.png)
   
 
