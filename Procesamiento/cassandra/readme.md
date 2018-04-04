@@ -10,7 +10,7 @@ Representación y modelado de datos de actividades criminales con respecto a loc
     * Ver actividad criminal en un periodo de tiempo
     * Ver actividad criminal en una zona de la ciudad
     * Agregados por periodos de tiempo
-    * Agregadps por zona o tipo caso
+    * Agregados por zona o tipo caso
 * [Configuracion e instalación](#configuration-e-instalación)
 * [Procesamiento de datos](#procesamiento-de-datos)
 
