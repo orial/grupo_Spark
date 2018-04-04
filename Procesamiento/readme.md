@@ -41,9 +41,7 @@ El dataset, sin filtros y con información desde el 2003 hasta la actualidad (do
 
 ![](../docs/pre_download.png)
 
-
 ## Limpieza e Importación de datos
-
 
 Toda la información que se muestra en el mapa de incidencias, si desactivamos los filtros por defecto, se puede descargar mediante línea de comandos gracias al portal Socrata, lo haremos de la siguiente manera:
 
@@ -73,12 +71,15 @@ La estructura de datos se he conservado de forma homogénea para cada tipo de mo
 
 
 ## Consultas
+Hemos generalizado los tipos de consultas dependendiendo a las expectativas sobre la aplicación, en acorde a los siguientes usos:
 
 * Obtener toda las incidencias para un periodo de tiempo. 
 * Actividad criminal por zona
 * Actividad criminal por tipo de delito
 * Nº incidencias agrupadas por zona / *año*
 * Nº incidencias agrupadas por delito / *año*
+
+Todas se pueden encontrar implementadas bajo:
 
 * [Neo4j](/neo4j/readme.md#consultas)
 * [Mongodb](/mongodb/readme.md#consultas)
