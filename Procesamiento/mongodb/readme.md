@@ -75,16 +75,33 @@ Necesitamos diseñar para cada tipo de base de datos para poder listar las sigui
    db.incidents.count({DayOfWeek:"Sunday"})
    290936
   ```
+  
   * Incidencias en el dia 02/01/2015
   ```
   db.find({Date:"02/01/2015"}).pretty()
   ```
-  ![](../docs/02012015.PNG)
+  ![](../docs/02012015.PNG) 
   * Número de incidencias el 02/01/2015
   ```
    db.incidents.count({Date:"02/01/2015"})
    466
   ```
+  
+   * Incidencias en la Zona de LEAVENWORTH
+  ```
+  db.incidents.find({Address:/LEAVENWORTH/}).pretty()
+  ```
+  ![](../docs/sunday.PNG)
+  * Número de incidencias en LEAVENWORTH
+  ```
+   db.incidents.count({Address:/LEAVENWORTH/}})
+   28163
+  ```
+  * Incidencias en el dia 02/01/2015
+  ```
+  db.find({Date:"02/01/2015"}).pretty()
+  ```
+  ![](../docs/02012015.PNG)
 * Número de incidencias por año/dia (por tipo de delito)
 
 ```
