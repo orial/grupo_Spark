@@ -2,10 +2,9 @@
 
 * [Introducción](#introducción)
 
-* [Primeros pasos]
-  * [Instalación y configuración](#instalación-y-configuración)
-    * Requerimientos técnicos
-    * Pasos
+* [Primeros pasos](#instalación-y-configuración)
+    * Requerimientos técnicos(#requerimientos-técnicos)
+    * Pasos(#instalación)
 
 * [Preprocesamiento e importación de datos](#preprocesamiento-e-importación-de-datos)
   * [Limpieza de datos](#limpieza-de-datos)

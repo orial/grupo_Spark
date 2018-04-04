@@ -32,7 +32,7 @@ $ g++ -g -o processor app.cpp
 $ ./processor sample.tsv
 ```
 
-### Requerimientos técnicos
+### Requerimientos técnicos
 
 * g++
 * Visual studio Code (IDE)
