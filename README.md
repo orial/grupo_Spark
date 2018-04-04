@@ -2,7 +2,7 @@ Procesamiento/mongodb/readme.md# Ingeniería y Ciencia de datos II
 
 ## Projects
 
-* *I. Procesamiento*
+* I. [Procesamiento](Procesamiento/readme.md)
   * [Cassandra](Procesamiento/cassandra)
   * [Mongodb](Procesamiento/mongodb)
   * [Neo4j](Procesamiento/neo4j)
@@ -15,9 +15,9 @@ Procesamiento/mongodb/readme.md# Ingeniería y Ciencia de datos II
 
 
 ## I. Procesamiento
-
 Programa C++ que realice el mismo procesamiento directamente leyendo de fichero de datos.
-* Almacenamiento de los datos. 
+
+* Almacenamiento de los datos.
 * Analizar la estructura de los datos y estudiar como almacenarlos en cada caso y diseñar consultas para realizar actividades simples: ver actividad criminal en un periodo de tiempo, ver actividad criminal en una zona de la ciudad, calcular agregados por periodos de tiempo y zona, ... 
 
 ### Requirements
@@ -27,21 +27,6 @@ Programa C++ que realice el mismo procesamiento directamente leyendo de fichero 
 * Neo4j
 * Mongodb
 
-### Design
-
-Necesitamos diseñar para cada tipo de de base de datos para poder listar las siguientes consultas:
-
-* Número de incidencias por zona/dia
-* Número de incidencias por año/dia (por tipo de delito)
-* Frecuencia de incidencias por dia de la semana
-
-
-### Getting started
-Como arrancamos el proyecto
-
-```shell
-$ run
-```
 
 
 ## II. Análisis y representación
