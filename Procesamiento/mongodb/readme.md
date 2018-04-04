@@ -62,7 +62,7 @@
  
 ## Queries
 
-Necesitamos diseñar para cada tipo de de base de datos para poder listar las siguientes consultas:
+Necesitamos diseñar para cada tipo de base de datos para poder listar las siguientes consultas:
 
 * Número de incidencias por zona/dia
 
