@@ -1,46 +1,67 @@
 # Cassandra
 
-Representación y modelado de datos de actividades criminales con respecto a localizaciones o por periodos de tiempo entre los años 2003 y 2018 mediante Cassandra.
-
 * [Introducción](#introducción)
-* *Modelado de datos*
-  * [Almacenamiento de datos](#almacenamiento-de-datos)
-  * [Estructura de datos](#estructura-de-datos)
-  * [Consultas](#consultas)
-    * Ver actividad criminal en un periodo de tiempo
-    * Ver actividad criminal en una zona de la ciudad
-    * Agregados por periodos de tiempo
-    * Agregados por zona o tipo caso
-* [Configuracion e instalación](#configuration-e-instalación)
-* [Procesamiento de datos](#procesamiento-de-datos)
+
+* [Primeros pasos]
+  * [Instalación y configuración](#instalación-y-configuración)
+    * Requerimientos técnicos
+    * Pasos
+
+* [Preprocesamiento e importación de datos](#preprocesamiento-e-importación-de-datos)
+  * [Limpieza de datos](#limpieza-de-datos)
+  * [Importación](#importación-de-datos)
+
+* [Estructura y Modelado de datos](#estructura-de-datos)
+
+* [Consultas](#consultas)
+
+* [Referencias](#referencias)
 
 ---
-## Introducción
 
-La información del dataset proporcionada por el departamento _Policial de San Francisco_ contiene datos de todas las incidencias generadas por actividades criminales producidas desde el año 2003 hasta la actualidad. Esta información se encuentra expuesta de forma pública desde el sistema de actualización diaria del SFPD Crime Incident Reporting (sistema de reportes del departamento policial) a traves de su plataforma Socrata.
+## Introducción
+Representación y modelado de datos de actividades criminales con respecto a localizaciones o por periodos de tiempo entre los años 2003 y 2018 mediante Cassandra.
 
-![](../docs/map.png)
+## Instalación y configuración
 
-*¿Dónde podemos encontrar los datos?* La fuente de datos necesaria para realizar nuestro análisis de datos se puede descargar desde la vista ofrecida por Socrata para dicho reporte, bajo: 
+### Requerimientos técnicos
 
-https://dev.socrata.com/foundry/data.sfgov.org/cuks-n6tp
+* Java 1.8
+* Cassandra 3.11.2
+* DevCenter
 
-Desde la página principal, que ofrece la visualización de un mapa de incidencias basado en este dataset, solamente se pueden descargar versiones con información para el año actual. Esto ocurre desde la fecha del 3 de Marzo del 2018, bajo indicación de la última notificación, ofrecida desde la vista Socrata para dicho reporte:
+
+### Instalación
+
+* Descargar cassandra server
 
 ```
-[Change Notice 03/13/2018]: By the end of this month, this dataset will become historical and a new 
-one will be created starting with incident data in 2018. This one will remain here, but no longer 
-be updated. The new one will have data coming from a new system, will not have a 2 week lag, and 
-have updated districts among other quality improvements. We will attach a guide here with more detailed 
-change updates as soon as we have them.
+$ wget http://apache.rediris.es/cassandra/3.11.2/apache-cassandra-3.11.2-bin.tar.gz
+$ tar -xvf apache-cassandra-3.11.2-bin.tar.gz
 ```
 
-El dataset, sin filtros y con información desde el 2013 hasta la actualidad (dos semanas antes de la fecha actual), se puede descargar como CSV a partir de https://data.sfgov.org/d/tmnf-yvry.
+* Running cassandra server:
+```
+./apache-cassandra-3.11.2/bin/cassandra
+```
 
-![](../docs/pre_download.png)
+* Running CQL shell:
+```
+./apache-cassandra-3.11.2/bin/cqlsh
+```
+
+### Troubleshooting
+
+* DevCenter closes bceause of java virtual machine
+Edit DevCenter.app/Contents/devcenter.ini and add the line
+```
+-vm
+/Library/Java/JavaVirtualMachines/jdk1.8.0_51.jdk/Contents/Home/bin
+```
 
 
-## Almacenamiento de datos
+[_Ir al índice_](../readme.md)
+## Preprocesamiento e importación de datos
 
 El mapa de incidencias se puede descargar mediante línea de comandos:
 ```
@@ -54,7 +75,50 @@ IncidntNum	Category	Descript	DayOfWeek	Date	Time	PdDistrict	Resolution	Address	X
 150060275	NON-CRIMINAL	LOST PROPERTY	Monday	01/19/2015	14:00	MISSION	NONE	18TH ST / VALENCIA ST	-122.42158168137	37.7617007179518	(37.7617007179518, -122.42158168137)	15006027571000
 ```
 
-## Estructura de datos
+### Limpieza de datos
+
+Una vez creados los esquemas de tablas necesarias para el modelo de datos procedemos al preprocesamiento de los datos descargados desde el portal de información de incidencias para trabajar con datos limpios y en acorde al formato de los atributos que utilizaremos para dichas tablas. Se realizarán los siguientes cambios con respecto a los datos en bruto:
+
+* Formato timestamp para definir el campo 'time', a partir de las columnas 'Date' y 'Time' ('01/19/2015' y '14:00') para obtener '2015-01-19 14:00:00'.
+
+* Campos de agrupación relacionados con periodos de tiempo: year, month, day, hour, basados en los campos anteriores. Los cuales serán necesarios para las particiones de datos por año y/o búsqueda por horas.
+
+Para descargar y realizar este limpiado de datos in-situ lo podemos realizar desde la línea de comandos de la siguiente manera:
+
+```
+wget -O- "https://data.sfgov.org/api/views/tmnf-yvry/rows.tsv?accessType=DOWNLOAD&api_foundry=true" |tail -n +2 | tr '\t' ';' | sed -E 's/([0-9]+)\/([0-9]+)\/([0-9]+);([0-9]+):([0-9]+)/\3-\1-\2 \4:\5:00;\2;\3;\1;\4/g' > incidents.raw_data.csv
+```
+
+o una vez descargado el dataset en 'incidents.raw.tsv' con las 2 millones de entradas, realizamos el mismo tipo de procesamiento:
+
+ ```
+ nice cat incidents.raw.tsv |wc -l
+ 2185964
+ ```
+
+```
+ nice cat incidents.raw.tsv |tail -n +2 | tr '\t' ';' | sed -E 's/([0-9]+)\/([0-9]+)\/([0-9]+);([0-9]+):([0-9]+)/\3-\1-\2 \4:\5:00;\2;\3;\1;\4/g' > incidents.dataset.csv
+ ```
+
+Una muestra del resultado la podemos encontrar en el fichero [incidents.dataset.sample.100.tsv](../dataset/incidents.dataset.sample.100.tsv) generado a partir del original [incidents.raw.sample.100.tsv](../dataset/incidents.raw.sample.100.tsv).
+
+
+```
+150060275;NON-CRIMINAL;LOST PROPERTY;Monday;2015-01-19 14:00:00;19;2015;01;14;MISSION;NONE;18TH ST / VALENCIA ST;-122.42158168137;37.7617007179518;(37.7617007179518, -122.42158168137);15006027571000
+150098210;ROBBERY;ROBBERY, BODILY FORCE;Sunday;2015-02-01 15:45:00;01;2015;02;15;TENDERLOIN;NONE;300 Block of LEAVENWORTH ST;-122.414406029855;37.7841907151119;(37.7841907151119, -122.414406029855);15009821003074
+```
+
+A partir de aquí se procede al volcado de datos a una tabla de índole general
+
+
+### Importación de datos
+
+
+?
+
+
+[_Ir al índice_](../readme.md)
+## Estructura de datos
 
 En *Cassandra*, el diseño y definición de un modelo de datos se procede una vez conocidas las metas y sentencias necesarias para la visualización final de la información a analizar. Se sugiere seguir una series de pautas para conseguir un modelado de datos idóneo para el análisis y el procesamiento masivo de datos.
 
@@ -89,9 +153,14 @@ La visualización de la actividad criminal se consigue mediante la representaci�
 
 *Especificación del esquema*. La especificación del esquema vendrá determinado por la consulta o tipo de consulta que la requiera. Todos los esquemas se pueden generar obtenidos desde [schema.cql](cql/schema.cql)
 
+
+[_Ir al índice_](../readme.md)
+
 ## Consultas
 
-### Ver actividad criminal en un periodo de tiempo
+### Consultas comunes
+
+* Actividad criminal para un periodo de tiempo
 
 La actividad es ofrecida por la tabla: _incidents.overall_, con la estructura:
 
@@ -120,28 +189,32 @@ where time >= '2014-01-01 00:00:00' and time <= dateof(now())
 allow filtering;
 ```
 
-![](../docs/cassandra/queries/query_overall_periodtime.png)
+![period](../docs/cassandra/queries/query_overall_periodtime.png)
 
-* Información relacionada con una incidencia en concreto
 
-```
-select * from incidents.overall 
-where incidentId = 150098373 
-allow filtering;
-```
-![](../docs/cassandra/queries/query_getincident.png)
+  * Nº incidencias agrupadas por *día*
+  ```
+  MATCH (n:INCIDENT)-->(s:DATE) return s,count(n); // Incidentes por día
+  ```
 
-### Ver actividad criminal en una zona de la ciudad
+  * Nº incidencias agrupadas por *año*
+  ```
+  MATCH (n:INCIDENT)-->(s:DATE) return s.year,count(n) // Incidentes por año
+  ```
+
+* Actividad criminal por zona
 
 Para esta sentencia si se realiza una partición de datos adecuada, con respecto a la zona y año: _district:year_.
 
-* Obtener información de incidencias por zonas (para un determinado año)
+  * Obtener información de incidencias por zonas (para un determinado año)
+
 ```
  select district, year, incidentid, category, time, location 
  from incidents.bydistrict 
  where year = ?
 ```
-![](../docs/cassandra/queries/query_bydistrict_incidents_year_2015.png)
+
+![year](../docs/cassandra/queries/query_bydistrict_incidents_year_2015.png)
 
 Si queremos añadir condicion de periodo de tiempo, necesitamos añadir filtering:
 
@@ -152,11 +225,13 @@ Si queremos añadir condicion de periodo de tiempo, necesitamos añadir filterin
  allow filtering;
 ```
 
-### Visualizar incidencias de una actividad criminal de cierta índole
+
+* Actividad criminal por tipo de delito
+
 
 Para esta sentencia si se realiza una partición de datos adecuada, con respecto al tipo de incidencia y año: _category:year_.
 
-* Obtener información de incidencias por categorias (para un determinado año)
+  * Obtener información de incidencias por categorias (para un determinado año)
 ```
  select category, year, incidentid, category, time, location 
  from incidents.bycategory 
@@ -164,21 +239,19 @@ Para esta sentencia si se realiza una partición de datos adecuada, con respecto
 ```
 ![](../docs/cassandra/queries/query_bydistrict_incidents_year_2015.png)
 
+  * Nº incidencias agrupadas por *año*
 
-### Agregado por actividad y tiempo
-
-Obtener número de incidencias producidas de cierta categoria (por un determinado año)
-
-* Sin añadir filtro, más eficiente.
+  Para obtener número de incidencias producidas de cierta categoria (por un determinado año). Sin añadir filtro, más eficiente.
 ```
  select category, year, count(*) 
  from incidents.bycategory 
  where year = ?
  group by category;
 ```
+
 ![](../docs/cassandra/queries/query_bycategory_groupby_withoutfilter2.png)
 
-* Añadiendo filtro para añadir la condición de filtrar por mes
+  * Nº incidencias agrupadas por *año*
 ```
  select category, year, count(*) 
  from incidents.bycategory 
@@ -188,99 +261,41 @@ Obtener número de incidencias producidas de cierta categoria (por un determinad
 ```
 ![](../docs/cassandra/queries/query_bycategory_groupby_with_filter2.png)
 
+  * Nº incidencias agrupadas por *día*
 
-[_volver_](#cassandra)
+  ```
 
+  ```
 
-* Procesamiento de datos
+  * Nº incidencias agrupadas por *año*
 
-Una vez creados los esquemas de tablas necesarias para el modelo de datos procedemos al preprocesamiento de los datos descargados desde el portal de información de incidencias para trabajar con datos limpios y en acorde al formato de los atributos que utilizaremos para dichas tablas. Se realizarán los siguientes cambios con respecto a los datos en bruto:
+  ```
 
-* Formato timestamp para definir el campo 'time', a partir de las columnas 'Date' y 'Time' ('01/19/2015' y '14:00') para obtener '2015-01-19 14:00:00'.
-* Campos de agrupación relacionados con periodos de tiempo: year, month, day, hour, basados en los campos anteriores. Los cuales serán necesarios para las particiones de datos por año y/o búsqueda por horas.
+  ```
 
-Para descargar y realizar este limpiado de datos in-situ lo podemos realizar desde la línea de comandos de la siguiente manera:
+* Actividad criminal por dia de la semana
 
-```
-wget -O- "https://data.sfgov.org/api/views/tmnf-yvry/rows.tsv?accessType=DOWNLOAD&api_foundry=true" |tail -n +2 | tr '\t' ';' | sed -E 's/([0-9]+)\/([0-9]+)\/([0-9]+);([0-9]+):([0-9]+)/\3-\1-\2 \4:\5:00;\2;\3;\1;\4/g' > incidents.raw_data.csv
-```
-
-o una vez descargado el dataset en 'incidents.raw.tsv' con las 2 millones de entradas, realizamos el mismo tipo de procesamiento:
-
- ```
- $ nice cat incidents.raw.tsv |wc -l
- 2185964
- ```
-
-```
- $ nice cat incidents.raw.tsv |tail -n +2 | tr '\t' ';' | sed -E 's/([0-9]+)\/([0-9]+)\/([0-9]+);([0-9]+):([0-9]+)/\3-\1-\2 \4:\5:00;\2;\3;\1;\4/g' > incidents.dataset.csv
- ```
-
-Una muestra del resultado la podemos encontrar en el fichero [incidents.dataset.sample.100.tsv](../dataset/incidents.dataset.sample.100.tsv) generado a partir del original [incidents.raw.sample.100.tsv](../dataset/incidents.raw.sample.100.tsv).
-
-```
-...
-150060275;NON-CRIMINAL;LOST PROPERTY;Monday;2015-01-19 14:00:00;19;2015;01;14;MISSION;NONE;18TH ST / VALENCIA ST;-122.42158168137;37.7617007179518;(37.7617007179518, -122.42158168137);15006027571000
-150098210;ROBBERY;ROBBERY, BODILY FORCE;Sunday;2015-02-01 15:45:00;01;2015;02;15;TENDERLOIN;NONE;300 Block of LEAVENWORTH ST;-122.414406029855;37.7841907151119;(37.7841907151119, -122.414406029855);15009821003074
-...
-```
-
-A partir de aquí se procede al volcado de datos a una tabla de índole general
 ```
 
 ```
 
 
-[_volver_](#cassandra)
 
-# Configuracion e instalación
+### Consultas específicas
 
-* Download cassandra
+
+* Información relacionada con una incidencia en concreto
 ```
-$ wget http://apache.rediris.es/cassandra/3.11.2/apache-cassandra-3.11.2-bin.tar.gz
-$ tar -xvf apache-cassandra-3.11.2-bin.tar.gz
+select * from incidents.overall 
+where incidentId = 150098373 
+allow filtering;
 ```
-* Running cassandra server:
-```
-./apache-cassandra-3.11.2/bin/cassandra
-```
-* Running CQL shell:
-```
-./apache-cassandra-3.11.2/bin/cqlsh
-```
-
----
-References:
-
-http://cassandra.apache.org/doc/latest/cql/dml.html
+![](../docs/cassandra/queries/query_getincident.png)
 
 
+[_volver_](../readme.md)
 
----
-## Troubleshooting
-### Is Cassandra running
+## Referencias
 
-Linux
-```
-netstat -ap tcp | grep -i "listen"|grep 9042
-```
-
-Macos
-```
-sudo lsof -PiTCP -sTCP:LISTEN|grep 9042
-java      41458 vrandkode  190u  IPv4 0x32271e72c028899      0t0  TCP localhost:9042 (LISTEN)
-```
-
-### Installing DevCenter
-
-* DevCenter closes bceause of java virtual machine
-Edit DevCenter.app/Contents/devcenter.ini and add the line
-```
--vm
-/Library/Java/JavaVirtualMachines/jdk1.8.0_51.jdk/Contents/Home/bin
-```
-
-
-
-
+Cassandra docs: [](http://cassandra.apache.org/doc/latest/cql/dml.html)
 
