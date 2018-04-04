@@ -126,3 +126,5 @@ Ejemplos de consultas:
   
 ## Referencias
 * [Manipulación de datos en MongoDB mediante Aggregation Pipeline](https://www.adictosaltrabajo.com/tutoriales/mongodb-agregatte/)
+* [Consultas MongoDB Like](http://lineadecodigo.com/mongodb/consultas-mongodb-like/)
+* [Operacionas de consultas avanzadas](http://charlascylon.com/2013-07-10-tutorial-mongodb-operaciones-de-consulta-avanzadas)
