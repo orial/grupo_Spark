@@ -8,33 +8,32 @@ WITH replication = {'class': 'SimpleStrategy', 'replication_factor': '1' };
 
 /* Creating scheme  */
 CREATE TABLE if not exists incidents.overall (
+    year int,
+    district text,
     incidentId bigint,
     subid bigint,
     address text,
     category text,
     dayoftheweek text,
     description text,
-    district text,
     location text,
     resolution text,
     time timestamp,
-    year int,
     month int,
     day int,
     hour int,
     x text,
     y text,
-    PRIMARY KEY ((incidentId,subid), time)
-) WITH CLUSTERING ORDER BY (time DESC);
+    PRIMARY KEY ((year), time, incidentId, subid)
+) WITH CLUSTERING ORDER BY (time DESC, incidentId DESC, subid DESC);
 
 CREATE INDEX overall_index_incidentid ON incidents.overall (incidentId);
 CREATE INDEX overall_index_subid ON incidents.overall (subid);
 
 /* Importing dataset */
 COPY incidents.overall(incidentId, category, description, dayoftheweek, time, day,year,month, hour, district, resolution, address,x,y,location, subid) 
-FROM '/Users/vrandkode/Workspace/M2/CienciaDatosII_112/repository/grupo_Spark/Procesamiento/dataset/incidents.dataset.sample.100.csv' 
+FROM 'dataset/incidents.dataset.sample.100.csv' 
 WITH DELIMITER=';' and HEADER=false and DATETIMEFORMAT='%Y-%m-%d %H:%M:%S';
-
 
 /*                                      */
 /* Creating incidents by district/year  */
@@ -67,7 +66,6 @@ COPY incidents.overall (year, district, incidentId, subid, address, category, da
 TO 'tmp_incidents_by_district.csv';
 COPY incidents.bydistrict(year, district, incidentId, subid, address, category, dayoftheweek, description, location, resolution, time, month, day, hour,x,y) 
 FROM 'tmp_incidents_by_district.csv';
-
 
 /*                                      */
 /* Creating incidents by category/year  */

@@ -1,19 +1,42 @@
 # CPPProcessor
 
-The application ```processor``` will export stats information into few files with the calculated information based on imported source TSV file
-passed as argument:
+
+# ProcessorCPP
+
+* [Introduction](#Introduction)
+
+* [Primeros pasos]
+  * [Instalación y configuración](#instalación-y-configuración)
+    * Requerimientos técnicos
+    * Pasos
+
+* [Preprocesamiento e importación de datos](#preprocesamiento-e-importación-de-datos)
+  * [Limpieza de datos](#limpieza-de-datos)
+  * [Importación](#importación-de-datos)
+
+* [Estructura y Modelado de datos](#estructura-de-datos)
+
+* [Consultas](#consultas)
+
+* [Referencias](#referencias)
+
+---
+
+## Introducción
+
+La aplicación ```processor``` exporta la información contenida en varios ficheros con la información detallada basada en el fichero inicial TSV recien preprocesado. EL fichero de entrada es especificado como argumento:
 
 * Incidents count by categories: _indicentsByCategory.tsv_
 * Incidents count by districts:  _indicentsByDistrict.tsv_
 
-## Getting started
+## Primeros pasos
 
 ```
 $ g++ -g -o processor app.cpp
 $ ./processor sample.tsv
 ```
 
-## How to use
+## Preprocesamiento e importación de datos
 
 ```
 $ ./processor sample.tsv
@@ -26,8 +49,57 @@ Incidents groups:6
 Exporting incidents count by category into filename: incidentsByCategory.tsv ...
 Incidents groups:1
 ```
+## Estructura de datos
 
-It returns two files with the information processed:
+La información se encuentra desglosada en estructuras basada en listas de estructura tipo truct ``ìncident````
+
+```
+struct incident
+{
+  std::string id;
+  std::string category;
+  std::string description;
+  std::string dayoftheweek;
+  std::string time;
+  std::string place;
+  std::string resolution;
+  std::string address;
+  std::string x;
+  std::string y;
+  std::string location;
+};
+```
+Mediante el método ```Íncidents::import(inputname)```el fichero CSV es procesado y transformado en un vector de estructuras tipo incident.
+
+Con ayuda de los métodos de la clase *Incidents*: getByDistrict y getByCategory, en base al privado genérico getByAttribute; se pueden construir consultas de filtrado y de agregación de forma rápida:
+
+```
+/* Filtrar y agrupar por distrito */
+std::map<std::string, vector<incident> > getByDistrict();
+```
+```
+/* Filtrar y agrupar por categoria */
+std::map<std::string, vector<incident> > getByCategory();
+```
+
+```    
+std::map<std::string, vector<incident> > getByAttribute(const char * attribute);
+```
+
+Otros métodos de agrupación de índole genéricas son usados para realizar consultas de tipo *agregado*:
+
+* Por zona ```void exportDistrictsCount(Incidents incidents, const char* filename)```
+* Por distrito ```void exportCategoryCount(Incidents incidents, const char* filename)```
+
+
+## Consultas
+
+En la salida se recuperan dos ficheros con la información de las *consultas* realizadas:
+
+ * Actividad criminal por distrito
+ * Actividad criminal por categoria
+
+### Actividad criminal por distrito
 
 _incidentsByDistrict.tsv_
 ```
@@ -39,12 +111,15 @@ northern	2
 southern	3
 ```
 
+### Actividad criminal por categoria
+
 _incidentsByCategory.tsv_
 ```
 larceny/theft	10
 ```
 
-## References
+
+## Referencias
 * C++ Concurrency in action (Chapter 8) [book](http://www.bogotobogo.com/cplusplus/files/CplusplusConcurrencyInAction_PracticalMultithreading.pdf)
 
 * Split lines into record variables 

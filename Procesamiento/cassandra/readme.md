@@ -30,8 +30,7 @@ Representación y modelado de datos de actividades criminales con respecto a loc
 * Cassandra 3.11.2
 * DevCenter
 
-
-### Instalación
+### Instalación
 
 * Descargar cassandra server
 
@@ -50,7 +49,7 @@ $ tar -xvf apache-cassandra-3.11.2-bin.tar.gz
 ./apache-cassandra-3.11.2/bin/cqlsh
 ```
 
-### Troubleshooting
+### Troubleshooting
 
 * DevCenter closes bceause of java virtual machine
 Edit DevCenter.app/Contents/devcenter.ini and add the line
@@ -61,7 +60,8 @@ Edit DevCenter.app/Contents/devcenter.ini and add the line
 
 
 [_Ir al índice_](../readme.md)
-## Preprocesamiento e importación de datos
+
+## Preprocesamiento e importación de datos
 
 El mapa de incidencias se puede descargar mediante línea de comandos:
 ```
@@ -110,15 +110,23 @@ Una muestra del resultado la podemos encontrar en el fichero [incidents.dataset.
 
 A partir de aquí se procede al volcado de datos a una tabla de índole general
 
-
 ### Importación de datos
 
+Para realizar el volcado e importación de datos es imprescindible qye se haya creado: el keyspace de trabajo y los esquemas y tablas físicas sobre la consola CSQL o desde el DevCenter. El comando utilizado para realizar el volcado se denomina _COPY_. Es un comando bastante simple de usar, poco flexible y dúctil para poder realizar transformaciones o selecciones específicas.
 
-?
+```
+COPY incidents.overall(incidentId, category, description, dayoftheweek, time, day,year,month, hour, district, resolution, address,x,y,location, subid) 
+FROM 'dataset/incidents.dataset.sample.100.csv' 
+WITH DELIMITER=';' and HEADER=false and DATETIMEFORMAT='%Y-%m-%d %H:%M:%S';
+```
+
+Para la importación de datos a los otros esquemas se sigue un proceso de importación en cadena, de manera que entre las tablas con la información volcada son tomadas como base para realizar una exportación-importación de campos selectivos.
+
+*Tabla 1 -> Export -> solo los campos necesarios para la Tabla2 (script cql temporal) <- Import <- Tabla 2*
 
 
 [_Ir al índice_](../readme.md)
-## Estructura de datos
+## Estructura de datos
 
 En *Cassandra*, el diseño y definición de un modelo de datos se procede una vez conocidas las metas y sentencias necesarias para la visualización final de la información a analizar. Se sugiere seguir una series de pautas para conseguir un modelado de datos idóneo para el análisis y el procesamiento masivo de datos.
 
@@ -158,27 +166,32 @@ La visualización de la actividad criminal se consigue mediante la representaci�
 
 ## Consultas
 
-### Consultas comunes
+Todas las consultas se pueden encuentrar en el script CQL [[cql/queries.cql][, pero para realizarlas es necesario crear el esquema de la estructura en la
+base de datos de _Cassandra_ desde la consola a partir de los esquemas en [[cql/schema.cql]].
 
-* Actividad criminal para un periodo de tiempo
+1. Crear keyspace
+2. Crear tablas e volcar los dataset mediante el comando COPY
+
+### Actividad criminal para un *periodo de tiempo*
 
 La actividad es ofrecida por la tabla: _incidents.overall_, con la estructura:
 
 |  |   |
 | ------- | --- |
-| Partition keys | _incidentId:subid_|
-| Clustering key | _time_ |
+| Partition keys | _year_|
+| Clustering keys | _time_,_incidentid_ |
 
-La información se encuentra particionada por una clave primaria compuesta de las claves _incidencia_ y _delito_; pero al añadir el campo _time_ como clave de clusterización podemos realizar una búsqueda por periodo sin distinguir año. No se podría considerar una consulta muy eficiente ya que no se aprovecha las ventajas de particionamiento con respecto a la condición de búsqueda.
+![table](../docs/cassandra/queries/diagrama_table1.png)
+
+La información se encuentra particionada por una clave primaria compuesta de las claves: de partición _año_; pero al añadir el campo _time_ como clave de clusterización podemos realizar una búsqueda por periodo. No se podría considerar una consulta muy eficiente ya que no se aprovecha las ventajas de particionamiento con respecto a la condición de búsqueda.
 
 ```
 CREATE TABLE incidents.overall (
-    incidentid bigint,
-    subid bigint,
+    year int,
     time timestamp,
     ...
-PRIMARY KEY ((incidentid, subid), time)
-) WITH CLUSTERING ORDER BY (time DESC);
+PRIMARY KEY ((year), time, incidentId, subid)
+) WITH CLUSTERING ORDER BY (time DESC, incident ASC, subId ASC);
 ```
 
 * Obtener toda las incidencias para un periodo de tiempo. 
@@ -186,21 +199,10 @@ PRIMARY KEY ((incidentid, subid), time)
 ```
 select * from incidents.overall
 where time >= '2014-01-01 00:00:00' and time <= dateof(now())
+and yearh = 2017
 allow filtering;
 ```
-
 ![period](../docs/cassandra/queries/query_overall_periodtime.png)
-
-
-  * Nº incidencias agrupadas por *día*
-  ```
-  MATCH (n:INCIDENT)-->(s:DATE) return s,count(n); // Incidentes por día
-  ```
-
-  * Nº incidencias agrupadas por *año*
-  ```
-  MATCH (n:INCIDENT)-->(s:DATE) return s.year,count(n) // Incidentes por año
-  ```
 
 * Actividad criminal por zona
 
@@ -225,9 +227,7 @@ Si queremos añadir condicion de periodo de tiempo, necesitamos añadir filterin
  allow filtering;
 ```
 
-
 * Actividad criminal por tipo de delito
-
 
 Para esta sentencia si se realiza una partición de datos adecuada, con respecto al tipo de incidencia y año: _category:year_.
 
@@ -260,38 +260,6 @@ Para esta sentencia si se realiza una partición de datos adecuada, con respecto
  allow filtering;
 ```
 ![](../docs/cassandra/queries/query_bycategory_groupby_with_filter2.png)
-
-  * Nº incidencias agrupadas por *día*
-
-  ```
-
-  ```
-
-  * Nº incidencias agrupadas por *año*
-
-  ```
-
-  ```
-
-* Actividad criminal por dia de la semana
-
-```
-
-```
-
-
-
-### Consultas específicas
-
-
-* Información relacionada con una incidencia en concreto
-```
-select * from incidents.overall 
-where incidentId = 150098373 
-allow filtering;
-```
-![](../docs/cassandra/queries/query_getincident.png)
-
 
 [_volver_](../readme.md)
 

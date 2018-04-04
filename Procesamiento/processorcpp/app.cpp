@@ -13,6 +13,9 @@
 using namespace std;
 using std::string;
 
+/**
+ * Estructura base de cada fila que representa un incidente.
+ */
 struct incident
 {
   std::string id;
@@ -28,16 +31,24 @@ struct incident
   std::string location;
 };
 
+/**
+ * Row. Clase reprensetativa de la estructura de datos física
+ * que compone una linea parseada.
+ * */
 class Row {
     public:
+        /* Operador de acceso */
         std::string const& operator[](std::size_t index) const
         {
             return _data[index];
         };
+        /* Operador para obtener tamaño */
         std::size_t size() const
         {
             return _data.size();
         };
+        /* Operador para realizar el parseo de la línea y
+        * guardado en una lista de datos */
         void read(std::istream& str)
         {
             std::string line;
@@ -60,16 +71,26 @@ class Row {
 
 };
 
+/** Procesador stream específico para la clase Row */
 std::istream& operator>>(std::istream& str, Row& data)
 {
     data.read(str);
     return str;
 };
 
+/**
+ * Incidents. Clase referencia que contendrá toda
+ * la estructura de datos en base a filas almacenada
+ * en una lista de estructuras de tipo incident.
+ */
 class Incidents {
     public:
         Incidents();
+
+        /* Función que realiza la importación desde el fichero entrada */
         void import(std::string filename);
+
+        /* Métodos de acceso */
         incident const& operator[](std::size_t index) const
         {
             return _incidents[index];
@@ -78,13 +99,14 @@ class Incidents {
         {
             return _incidents.size();
         };
+        /* Filtrar y agrupar para cierto atributo */
         std::vector<incident> filterBy(const char*, const char*);
+
+        /* Filtrar y agrupar por distrito */
         std::map<std::string, vector<incident> > getByDistrict();
+
+        /* Filtrar y agrupar por categoria */
         std::map<std::string, vector<incident> > getByCategory();
-        /*std::vector<incident> Incidents::getByCategory();
-        std::vector<incident> Incidents::getOverallByPeriod(const char* from, const char* to);
-        std::vector<incident> Incidents::getDistrictsByPeriod(const char* from, const char* to);
-        std::vector<incident> Incidents::getCategoriesByPeriod(const char* from, const char* to);*/
     private:
         std::map<std::string, vector<incident> > getByAttribute(const char * attribute);
         std::vector<std::string> split(const std::string&, char);
@@ -92,6 +114,10 @@ class Incidents {
         incident from(Row&);
 };
 
+/* 
+* Método privado utilizado para realizar filtrado de forma sistemática 
+* por el atributo adecuado.
+*/
 std::string GetValueByAttribute(const char* attribute, incident& in)
 {
     if (attribute == "category") return in.category;
@@ -172,6 +198,9 @@ void Incidents::import(std::string filename)
 Incidents::Incidents(void) {
 }
 
+/*
+* Agregado que realiza la agrupación por distrito.
+*/
 void exportDistrictsCount(Incidents incidents, const char* filename)
 {
     std::ofstream out(filename);
@@ -182,6 +211,9 @@ void exportDistrictsCount(Incidents incidents, const char* filename)
     out.close();
 };
 
+/*
+* Agregado que realiza la agrupación por categoria.
+*/
 void exportCategoryCount(Incidents incidents, const char* filename)
 {
     std::ofstream out(filename);

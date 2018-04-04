@@ -6,9 +6,9 @@ select * from incidents.overall
 
 /* Buscar incidencia */
 select * from incidents.overall 
-where incidentId = 150098975;
+where year in (2017,2016,2015) incidentId = 150098975;
 
-/* Actividad criminal por zonas (año 2017)/
+/* Actividad criminal por zonas (año 2017) */
 select district, year, incidentid, category, time, location 
  from incidents.bydistrict 
  where year = 2017;
@@ -25,7 +25,8 @@ select category, year, incidentid, category, time, location
  where year = 2017;
 
 /* Actividad criminal para zonas en el mes de Enero (año 2017)*/
-select year, district, count(*) from incidents.bydistrict
+select year, district, count(*) 
+ from incidents.bydistrict
  where year = 2017 and month = 1 
  group by district 
  allow filtering;
