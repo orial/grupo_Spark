@@ -5,14 +5,10 @@
 
 * [Introduction](#Introduction)
 
-* [Primeros pasos]
-  * [Instalación y configuración](#instalación-y-configuración)
-    * Requerimientos técnicos
-    * Pasos
+* [Primeros pasos](#primeros-pasos)
+  * Requerimientos técnicos
 
 * [Preprocesamiento e importación de datos](#preprocesamiento-e-importación-de-datos)
-  * [Limpieza de datos](#limpieza-de-datos)
-  * [Importación](#importación-de-datos)
 
 * [Estructura y Modelado de datos](#estructura-de-datos)
 
@@ -36,7 +32,14 @@ $ g++ -g -o processor app.cpp
 $ ./processor sample.tsv
 ```
 
+### Requerimientos técnicos
+
+* g++
+* Visual studio Code (IDE)
+
 ## Preprocesamiento e importación de datos
+
+La aplicación preprocesa los datos y realiza la importación de forma automática, mediante la clase ```Incidents::import(filename)```.
 
 ```
 $ ./processor sample.tsv
@@ -99,7 +102,7 @@ En la salida se recuperan dos ficheros con la información de las *consultas* re
  * Actividad criminal por distrito
  * Actividad criminal por categoria
 
-### Actividad criminal por distrito
+### Actividad criminal por distrito
 
 _incidentsByDistrict.tsv_
 ```
@@ -111,7 +114,7 @@ northern	2
 southern	3
 ```
 
-### Actividad criminal por categoria
+### Actividad criminal por categoria
 
 _incidentsByCategory.tsv_
 ```
@@ -119,7 +122,7 @@ larceny/theft	10
 ```
 
 
-## Referencias
+## Referencias
 * C++ Concurrency in action (Chapter 8) [book](http://www.bogotobogo.com/cplusplus/files/CplusplusConcurrencyInAction_PracticalMultithreading.pdf)
 
 * Split lines into record variables 
