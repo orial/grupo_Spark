@@ -86,7 +86,14 @@ Necesitamos diseñar para cada tipo de base de datos para poder listar las sigui
    db.incidents.count({Date:"02/01/2015"})
    466
   ```
-  
+ Cuando accedemos a los datos de los campos de un documento en MongoDB podemos encontrarnos la necesidad de realizar consultas MongoDB like. Es decir, realizar consultas por cadenas similares de texto. Por ejemplo, nombres que empiecen por una letra o letras, palabras que contengan una cierta cadena de caracteres,...
+
+Las consultas MongoDB like se resuelven mediante expresiones regulares. Lo que realizaremos mediante la siguinte sintaxis:
+```
+db.coleccion.find({campo:expresión_regular});
+```
+Para los patrones de las expresiones regulares MongoDB utiliza “Perl Compatible Regular Expressions” (PCRE). 
+
    * Incidencias en la Zona de LEAVENWORTH
   ```
   db.incidents.find({Address:/LEAVENWORTH/}).pretty()
