@@ -100,7 +100,7 @@ Ejemplos de consultas:
   ```
   * Número de incidencias en LEAVENWORTH
   ```
-   db.incidents.count({Address:/LEAVENWORTH/}})
+   db.incidents.count({Address:/LEAVENWORTH/})
    28163
   ```
   
@@ -113,8 +113,8 @@ Ejemplos de consultas:
   ![](../docs/2013ROBBERY.PNG)
   * Número de incidencias de la busqueda anterior
   ```
-   db.incidents.count({Address:/LEAVENWORTH/}})
-   28163
+   db.incidents.count({Date:/2013/,Category:"ROBBERY"})
+   4196
   ```
 * Frecuencia de incidencias por dia de la semana
 
