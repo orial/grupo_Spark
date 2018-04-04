@@ -124,4 +124,5 @@ Ejemplos de consultas:
   ![](../docs/dias.png)
   ![](../docs/frecuencia.png)
   
-
+## Referencias
+* Manipulación de datos en MongoDB mediante Aggregation Pipeline.
