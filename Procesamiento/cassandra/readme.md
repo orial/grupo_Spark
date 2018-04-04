@@ -3,8 +3,8 @@
 * [Introducción](#introducción)
 
 * [Primeros pasos](#instalación-y-configuración)
-    * Requerimientos técnicos(#requerimientos-técnicos)
-    * Pasos(#instalación)
+    * [Requerimientos técnicos](#requerimientos-técnicos)
+    * [Pasos](#instalación)
 
 * [Preprocesamiento e importación de datos](#preprocesamiento-e-importación-de-datos)
   * [Limpieza de datos](#limpieza-de-datos)
@@ -180,7 +180,7 @@ La actividad es ofrecida por la tabla: _incidents.overall_, con la estructura:
 | Partition keys | _year_|
 | Clustering keys | _time_,_incidentid_ |
 
-![table](../docs/cassandra/queries/diagrama_table1.png)
+![table](../docs/cassandra/diagrama_table1.png)
 
 La información se encuentra particionada por una clave primaria compuesta de las claves: de partición _año_; pero al añadir el campo _time_ como clave de clusterización podemos realizar una búsqueda por periodo. No se podría considerar una consulta muy eficiente ya que no se aprovecha las ventajas de particionamiento con respecto a la condición de búsqueda.
 
