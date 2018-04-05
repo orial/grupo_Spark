@@ -18,7 +18,7 @@
 * [Referencias](#referencias)
 
 ---
-## Introducción
+## Introducción
 
 Representación y modelado de datos de actividades criminales con respecto a localizaciones o por periodos de tiempo entre los años 2003 y 2018 mediante Neo4j.
 
@@ -29,7 +29,7 @@ Representación y modelado de datos de actividades criminales con respecto a loc
 * Neo4j Desktop/Server
 * R and RStudio
 
-### Instalación
+### Instalación
 
 * Download Neo4j Desktop
 * Download R
@@ -38,9 +38,9 @@ Representación y modelado de datos de actividades criminales con respecto a loc
 * Run RSTudio
 
 [_Ir al índice_](../readme.md)
-## Preprocesamiento e importación de datos
+## Preprocesamiento e importación de datos
 
-### Limpieza y preprocesamiento de datos
+ ### Limpieza y preprocesamiento de datos
 
 *Preprocesamiento mediante R*. Aunque en primer lugar no era necesario, tras causar cierto error en __Cypher__ relacionado con la ausencia de una propiedad en una operación __MERGE__, se procedió a buscar el motivo de este fallo en el archivo *dataset.raw.csv* descargado directamente de la fuente.
 
@@ -225,7 +225,7 @@ Que provee de un editor propio.
 
 
 [_Ir al índice_](../readme.md)
-## Estructura de datos
+## Estructura de datos
 
 
 Dada la estructura del archivo .CSV proporcionado, titulado con los siguientes **headers**:
@@ -291,6 +291,6 @@ MATCH (n:INCIDENT)-->(s:DATE) return s.dayofweek,s.year,count(n) order by s.dayo
 [_Ir al índice_](../readme.md)
 
 
-## Referencias:
+## Referencias:
 
 * 
