@@ -19,7 +19,7 @@
 
 ---
 
-## Introducción
+## Introducción
 Representación y modelado de datos de actividades criminales con respecto a localizaciones o por periodos de tiempo entre los años 2003 y 2018 mediante Mongodb.
 
 ## Instalación y configuración
@@ -28,7 +28,7 @@ Representación y modelado de datos de actividades criminales con respecto a loc
 
 * Mongodb
 
-### Instalación
+### Instalación
 
 * Download mongodb
 * Download Compass
@@ -36,7 +36,7 @@ Representación y modelado de datos de actividades criminales con respecto a loc
 
 [_Ir al índice_](../readme.md)
 
-## Preprocesamiento e importación de datos
+## Preprocesamiento e importación de datos
 
 ### Limpieza e importación de datos
 
@@ -97,7 +97,7 @@ Descargamos csv desde la web:
  ```
 
 [_Ir al índice_](../readme.md)
-## Estructura de datos
+## Estructura de datos
 
 
 
