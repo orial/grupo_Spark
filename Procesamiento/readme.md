@@ -50,7 +50,7 @@ $ wget -O incidents.raw.tsv \
   		"https://data.sfgov.org/api/views/tmnf-yvry/rows.tsv?accessType=DOWNLOAD&api_foundry=true"
 ```
 
-La limpieza de datos se ha hecho en acorde al modelo de datos requerido para Cassandra,  Neo4j o Mongodb; pero en general se han recuperado la mayoría de las columnas. 
+La limpieza de datos se ha hecho de acuerdo al modelo de datos requerido para Cassandra,  Neo4j o Mongodb; pero en general se han recuperado la mayoría de las columnas. 
 
 
 * [Neo4j](neo4j/readme.md#preprocesamiento-e-importación-de-datos)
