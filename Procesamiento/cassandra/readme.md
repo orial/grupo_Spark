@@ -19,7 +19,56 @@
 ---
 
 ## Introducción
-Representación y modelado de datos de actividades criminales con respecto a localizaciones o por periodos de tiempo entre los años 2003 y 2018 mediante Cassandra.
+
+_Cassandra_ es una base de datos dependiente del *caso de uso*. En la mayoría de los casos, una simple instancia de MySQL o PostgreSQL haría mejor el trabajo.
+
+La idea principal es que encontremos que Cassandra pueda ofrecer facilidades con respecto a la organización de los **atributos** en nuestro modelo de datos.
+
+El uso de Cassandra tiene muchos pros y contras diferentes, muchos de los cuales dependen de lo que se quiera hacer con él. 
+
+**Pros**
+
+* **Consistencia estable y replicación de datos**. La relación entre la **estructura lógica y la física** permite que la información quede estructurada y organizada entre los nodos, con el fin de optimizar y almacenar la información entre ellos. 
+
+* **Redundancia de información**. La información se encuentra organizada entre los nodos de forma redundante a su vez.
+
+* *CQL* Lenguaje de consulta de Cassandra es una forma bastante familiar para hacer consultas sobre Cassandra. Es un subconjunto de SQL y tiene muchas de las mismas características, haciendo que la transición de un RDBMS basado en SQL a Cassandra sea menos discordante.
+
+
+**Pros**
+
+* **Sin Consultas Ad-Hoc**: La capa de almacenamiento de datos de Cassandra es básicamente un sistema de almacenamiento de clave-valor. Esto significa que debe "modelar" sus datos en torno a las consultas que desea que surjan, en lugar de en torno a la estructura de los datos en sí. Esto puede llevar a almacenar los datos varias veces de diferentes maneras para poder satisfacer los requisitos de su aplicación.
+
+* **Sin agregaciones**, aunque en esta versión si las usaremos (3.11): las versiones más nuevas de Cassandra tendrán soporte limitado para agregaciones con una sola partición. **Esto es de uso muy limitado. Debido a que Cassandra es una tienda de valores clave, hacer cosas como SUM, MIN, MAX, AVG y otras agregaciones requieren una gran cantidad de recursos si es posible**. Si hacer un análisis ad-hoc es un requisito para su aplicación, entonces Cassandra puede no ser para usted.
+
+* *CQL*: Es fácil para alguien que proviene de SQL confundirse acerca de qué es o no compatible. Esto significa una frustración adicional (costos de lectura) para los desarrolladores que no conocen las limitaciones de Cassandra.
+
+### Estructura de la información (Nivel lógico vs Nivel físico)
+
+Unas de las características principales de Cassandra es la separación entre nivel físico y lógico.
+
+![](../docs/cassandra/nivel_fisico.png)
+
+
+* **Column families** son abstracciones lógicas unitarias que conforman las tablas fisicas de CQL. Es la forma en la que disponemos la información, el esquema de organización de los campos y valores, mediante distintos tipos de columnas. 
+
+* **Particiones**. Define la estructura de compactación que engloban parte de la información de una tabla en concreto, y que las filas que la componen tienen en común el mismo criterio lógico dado por una/s *clave/s de partición*. Las filas que componen cada partición pueden estar ordenadas dependiendo del criterio de ordenación mediante definición de columnas como *claves clustering*. 
+
+* **Rows** Son las unidades de forman las column families y son instancias de las particiones. Una partición puede contener una gran cantidad de rows. Por cada partición, se pueden definir la ordenación de las filas que lo componen.
+
+En nuestro caso, las particiones van a ser tipo **multi-row** ya que contendrán una cantidad masiva de filas ordenadas (por timestamp), y tendrán en común un determinado criterio, dado por una *composite key* (clave de partición compuesta): por distrito o por zona a parte del año, conformando claves de distinto tipo dependiendo del modelo de consulta que se requeiera por la aplicación:
+
+
+* Por año: ```2017```
+* Por zona/año: ```2017:north```
+* Por tipo de delito/año: ```2017:theft```
+
+La definición de las tablas necesarias para las consultas las podemos encontrar bajo el fichero: [](cql/create_scheme.cql).
+
+*Con respecto a las ordenación de las filas* las claves de ordenación o clustering han sido fijadas sobre las columnas claves para seleccionar filas y definir cierto criterio en la realización de cualquier consulta. Generalmente la columna ```time``` ha sido seleccionada en todas las opciones y de forma DESCENDENTE, con el fin de que a nivel físico sean ordenadas de *más reciente a menos reciente*; pues por usabilidad no es cuestionable dicho orden.
+
+A **nivel de arquitectura**, solo mencionar que los datos de las tablas son alojadas como **column families** y dicha información es compartida de forma redundante entre los nodos que compongan la red Cassandra y del grado de replicación de como se configure el keyspace (Véase figura anterior.)
+
 
 ## Instalación y configuración
 
@@ -160,6 +209,16 @@ La visualización de la actividad criminal se consigue mediante la representaci�
 
 *Especificación del esquema*. La especificación del esquema vendrá determinado por la consulta o tipo de consulta que la requiera. Todos los esquemas se pueden generar obtenidos desde [schema.cql](cql/schema.cql)
 
+## Modelado de datos
+
+**Modelo de datos físico**. Ahora, pasemos nuestra atención en las tablas de incidencias diseñadas. Nuestro modelo lógico contiene tres tablas desnormalizadas para admitir consultas de incidencias por año, zona, tipo de delito y fecha. A medida que trabajamos para implementar estos diseños por consultas, querremos considerar si debemos realizar la administración con la desnormalización de forma manual o usar la capacidad de extrapolar las consultas dentro de vistas en Cassandra, con ayuda de las consultas de agregación.
+
+El diseño que se muestra para el espacio de incidencias en la siguiente figura utiliza ambos enfoques. Elegimos implementar **incidents.overall** y **incidents.bydistrict** y **incidents.bycategory** como **tablas regulares**.
+
+El razonamiento detrás de esta elección de diseño momentáneamente, es que gracias a las claves de partición compuestas entre zona o tipo de delito con el año, podemos dividir y dimensionar mejor las consultas sobre todo cuando existe una base de información masiva.
+
+![modelo de datos fisico con tablas](../docs/cassandra/model_tablas.png)
+
 
 [_Ir al índice_](../readme.md)
 
@@ -244,7 +303,7 @@ Para esta sentencia si se realiza una partición de datos adecuada, con respecto
 ```
  select category, year, count(*) 
  from incidents.bycategory 
- where year = ?
+ where year = ? 
  group by category;
 ```
 
@@ -264,5 +323,9 @@ Para esta sentencia si se realiza una partición de datos adecuada, con respecto
 
 ## Referencias
 
-Cassandra docs: [](http://cassandra.apache.org/doc/latest/cql/dml.html)
+[Cassandra docs](http://cassandra.apache.org/doc/latest/cql/dml.html)
+
+[Diseñando un modelo cassandra](https://shermandigital.com/blog/designing-a-cassandra-data-model/)
+
+[Cassandra Guia definitiva](http://0-proquestcombo.safaribooksonline.com.jabega.uma.es/9781491933657)
 
