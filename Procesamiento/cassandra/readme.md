@@ -18,7 +18,7 @@
 
 ---
 
-## Introducción
+## Introducción
 Representación y modelado de datos de actividades criminales con respecto a localizaciones o por periodos de tiempo entre los años 2003 y 2018 mediante Cassandra.
 
 ## Instalación y configuración
