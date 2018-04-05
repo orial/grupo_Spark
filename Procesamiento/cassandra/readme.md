@@ -11,6 +11,9 @@
   * [Importación](#importación-de-datos)
 
 * [Estructura y Modelado de datos](#estructura-de-datos)
+  * [Diseño](#diseño)
+  * [Identificación de consultas](#identificación-de-consultas)
+  * [Modelado de datos](#modelado-de-datos)
 
 * [Consultas](#consultas)
 
@@ -176,6 +179,7 @@ Para la importación de datos a los otros esquemas se sigue un proceso de import
 [_Ir al índice_](../readme.md)
 ## Estructura de datos
 
+### Diseño
 En *Cassandra*, el diseño y definición de un modelo de datos se procede una vez conocidas las metas y sentencias necesarias para la visualización final de la información a analizar. Se sugiere seguir una series de pautas para conseguir un modelado de datos idóneo para el análisis y el procesamiento masivo de datos.
 
 Hay dos metas importantes a tener en cuenta para el modelado de datos en *Cassandra*:
@@ -193,6 +197,7 @@ Dado que el modelo de datos se hace en acorde a las sentencias y no sobre las en
 
 ![](../docs/modelodatosraw.png)
 
+### Identificación de consultas
 *Identificar sentencias*. La mejor manera de particionar las lecturas es modelar los datos en acorde a las sentencias, que son dadas por los requisitos. De primera instancia hay que considerar los siguientes puntos antes de realizar la definición de las sentencias:
 
   * Agrupación por un atributo: por distrito, por tipo de actividad criminal
@@ -209,7 +214,7 @@ La visualización de la actividad criminal se consigue mediante la representaci�
 
 *Especificación del esquema*. La especificación del esquema vendrá determinado por la consulta o tipo de consulta que la requiera. Todos los esquemas se pueden generar obtenidos desde [schema.cql](cql/schema.cql)
 
-## Modelado de datos
+### Modelado de datos
 
 **Modelo de datos físico**. Ahora, pasemos nuestra atención en las tablas de incidencias diseñadas. Nuestro modelo lógico contiene tres tablas desnormalizadas para admitir consultas de incidencias por año, zona, tipo de delito y fecha. A medida que trabajamos para implementar estos diseños por consultas, querremos considerar si debemos realizar la administración con la desnormalización de forma manual o usar la capacidad de extrapolar las consultas dentro de vistas en Cassandra, con ayuda de las consultas de agregación.
 
