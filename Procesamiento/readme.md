@@ -1,13 +1,14 @@
 
-# Fase de Procesamiento de datos
+# Fase I: Procesamiento de datos I
 
 * [Introducción](#introducción)
 * [Información](#origen-y-estructura-de-la-información)
   * [Estructura de la información](#estructura-de-la-información)
   * [Descarga](#descarga)
 * [Preprocesamiento e importación](#limpieza-e-importación-de-datos)
-
-
+* [Estructura de datos](#estructura-de-datos)
+* [Consultas](#consultas)
+* [Colaboradores](#colaboración)
 
 ----
 
