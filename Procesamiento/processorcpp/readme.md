@@ -127,7 +127,3 @@ larceny/theft	10
 
 * Split lines into record variables 
 https://stackoverflow.com/questions/15701015/split-and-process-a-string-in-c-into-different-variables
-
-
-## Contributors
-* Álvaro vrandkode@gmail.com
