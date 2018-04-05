@@ -14,7 +14,7 @@
 
 La información del dataset proporcionada por el departamento Policial de San Francisco, se encuentra abierta al público y contiene datos de todas las incidencias generadas por actividades criminales producidas desde el año 2003 hasta la actualidad. Esta información se encuentra expuesta de forma pública desde el sistema de actualización diaria del SFPD Crime Incident Reporting (sistema de reportes del departamento policial) a traves de su plataforma Socrata.
 
-## Información origen
+## Información origen
 ### Estructura de la información
 La información esta representada por un conjunto de 2 millones de filas, que contiene información detallada de actividades criminales (o incidencias) representada por: tipo de delito, resolución, distrito, coordenadas y dirección de la zona, nº de incidencia vinculada, todos producidos entre el 2003 hasta la actualidad.
 
