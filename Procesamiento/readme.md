@@ -105,5 +105,5 @@ Todas se pueden encontrar implementadas bajo:
 ## Colaboración
 
 * Julio _(@melferas)_
-* Lupicinio García Rúiz _(@orial)_
+* Lupicinio García Ortiz _(@orial)_
 * Álvaro López _(@vrandkode)_
