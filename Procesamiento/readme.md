@@ -24,7 +24,7 @@ La información esta representada por un conjunto de 2 millones de filas, que co
 150060275;NON-CRIMINAL;LOST PROPERTY;Monday;2015-01-19 14:00:00;MISSION;NONE;18TH ST / VALENCIA ST;-122.42158168137;37.7617007179518;(37.7617007179518, -122.42158168137);15006027571000
 ```
 
-La fuente de datos necesaria para realizar nuestro análisis de datos se puede descargar desde una página proporcionada por el sistema de datos del departamento policial, a través de la vista ofrecida por el portal de datos Socrata Open Data, el cual proporciona documentación para extraer reportes y las incidencias mencionadas por descargas manuales o servicios de actualizaciones a través de sus APIs. El informe sobre dicha entrada se encuentra bajo la entrada del portal:
+La fuente de datos necesaria para realizar nuestro análisis de datos se puede descargar desde una página proporcionada por el sistema de datos del departamento policial, a través de la vista ofrecida por el portal de datos Socrata Open Data, el cual proporciona documentación para extraer reportes y las incidencias mencionadas por descargas manuales o servicios de actualizaciones a través de sus APIs. El informe sobre dicha entrada se encuentra en el portal:
 
 [](https://dev.socrata.com/foundry/data.sfgov.org/cuks-n6tp)
 
@@ -35,7 +35,7 @@ Desde la página que contiene la visualización de un mapa de incidencias basado
 have updated districts among other quality improvements. We will attach a guide here with more detailed change updates as soon as we have them.
 ```
 
-### ¿Dónde podemos encontrar la versión adecuada?
+### ¿Dónde podemos encontrar la versión adecuada?
 
 El dataset, sin filtros y con información desde el 2003 hasta la actualidad (dos semanas antes de la fecha actual), se puede descargar como documento CSV/TSV a partir de una entrada al portal proporcionado por Socrata:
 
