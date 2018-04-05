@@ -229,8 +229,8 @@ El razonamiento detrás de esta elección de diseño momentáneamente, es que gr
 
 ## Consultas
 
-Todas las consultas se pueden encuentrar en el script CQL [[cql/queries.cql][, pero para realizarlas es necesario crear el esquema de la estructura en la
-base de datos de _Cassandra_ desde la consola a partir de los esquemas en [[cql/schema.cql]].
+Todas las consultas se pueden encuentrar en el script CQL [cql/queries.cql](cql/queries.cql), pero para realizarlas es necesario crear el esquema de la estructura en la
+base de datos de _Cassandra_ desde la consola a partir de los esquemas en [cql/schema.cql](cql/schema.cql).
 
 1. Crear keyspace
 2. Crear tablas e volcar los dataset mediante el comando COPY
@@ -271,6 +271,13 @@ allow filtering;
 
 Para esta sentencia si se realiza una partición de datos adecuada, con respecto a la zona y año: _district:year_.
 
+La actividad es ofrecida por la tabla: _incidents.overall_, con la estructura:
+
+|  |   |
+| ------- | --- |
+| Partition keys | _year_, _district_|
+| Clustering keys | _time_,... |
+
   * Obtener información de incidencias por zonas (para un determinado año)
 
 ```
@@ -293,6 +300,11 @@ Si queremos añadir condicion de periodo de tiempo, necesitamos añadir filterin
 * Actividad criminal por tipo de delito
 
 Para esta sentencia si se realiza una partición de datos adecuada, con respecto al tipo de incidencia y año: _category:year_.
+
+|  |   |
+| ------- | --- |
+| Partition keys | _year_, _category_|
+| Clustering keys | _time_,... |
 
   * Obtener información de incidencias por categorias (para un determinado año)
 ```
