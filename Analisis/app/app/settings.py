@@ -31,6 +31,9 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'rest_framework',
+    'django_tables2',
+    'webapp.apps.WebappConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -81,9 +84,9 @@ DATABASES = {
     },
     'cassandra': {
         'ENGINE': 'django_cassandra_engine',
-        'NAME': 'db',
+        'NAME': 'incidents',
         'TEST_NAME': 'incidents',
-        'HOST': 'db1.example.com,db2.example.com',
+        'HOST': '127.0.0.1',
         'OPTIONS': {
             'replication': {
                 'strategy_class': 'SimpleStrategy',
@@ -94,7 +97,7 @@ DATABASES = {
 }
 
 # Password validation
-# https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
+# https://docs.djangoproject.com/en/2.0/ref/settings    /#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {

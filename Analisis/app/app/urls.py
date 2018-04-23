@@ -17,9 +17,10 @@ from django.contrib import admin
 from django.urls import path
 from django.conf.urls import url,include
 
-from webapp import views
 
 urlpatterns = [
+    path('queries/', include('webapp.urls')),
     path('admin/', admin.site.urls),
-    url(r'^$', include('webapp.urls')),
+    url(r'^incidents/', include('webapp.urls')),
+    
 ]
