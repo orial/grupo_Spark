@@ -6,9 +6,9 @@
   * [Neo4j](neo4j/readme.md)
 * [Consultas, vistas y representaciones gráficas](#representaciones)
 * Notebooks
-  * [Cassandra](cassandra/Analisis-Cassandra.html) [descarga](cassandra/Analisis-Cassandra.ipynb)
+  * [Cassandra](cassandra/Analisis-Cassandra/Analisis-Cassandra.md) [descarga](cassandra/Analisis-Cassandra.ipynb)
   * [Mongodb](mongodb/Analisis-Mongodb.html) [descarga](mongodb/Analisis-Mongodb.ipynb)
-  * [Neo4j](neo4j/Analisis-Neo4j.html) [descarga](neo4j/Analisis-Neo4j.ipynb)
+  * [Neo4j](neo4j/Analisis-Neo4j/Analisis-Neo4j.md) [descarga](neo4j/Analisis-Neo4j.ipynb)
 ----
 
 ## Introducción de los conectores
