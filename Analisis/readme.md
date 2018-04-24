@@ -16,3 +16,8 @@
 ### Drivers
 
 Cassandra: https://github.com/pycassa/pycassa
+
+Paginator: https://simpleisbetterthancomplex.com/tutorial/2016/08/03/how-to-paginate-with-django.html
+
+
+Maps: http://blog.mathieu-leplatre.info/geodjango-maps-with-leaflet.html
