@@ -3,9 +3,9 @@
 ![](maqueta_statico.png)
 
 
-## Requisitos
+## Requisitos
 
-Vistas: filtro: rango de fechas
+* Vistas: filtro: rango de fechas
 
 - Mapa de calor (Mongodb)
 
