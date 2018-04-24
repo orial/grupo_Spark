@@ -1,7 +1,7 @@
 import neo4j.v1
 from neo4j.v1 import GraphDatabase
 
-class Neo4JCrime(object):
+class Neo4JConnector(object):
 
     def __init__(self, uri, user, password):
         self._driver = GraphDatabase.driver(uri, auth=(user, password))
@@ -72,12 +72,12 @@ class Neo4JCrime(object):
         for i, l in enumerate(result.records()):
             listRes.insert(i, dict())
             for k, v in l.items():
-                # print(k,'->',v) # Aquí está el nodo y el nombre de la clave, además de otros resultados
+                #print(k,'->',v) # Aquí está el nodo y el nombre de la clave, además de otros resultados
                 if isinstance(v, neo4j.v1.types.Node):
                     listRes[i][f"{k}.labels"] = v.labels
                     listRes[i] = {**listRes[i], **{k + '.' + key: val for key, val in iter(v.properties.items())}}
                 elif isinstance(v,neo4j.v1.types.Relationship):
-                    listRes[i] = {f'{k}.type':v.type}
+                    listRes[i][f'{k}.type'] = v.type
                     listRes[i] = {**listRes[i], **{f'{k}.{key}': val for key, val in iter(v.properties.items())}}
                 else:
                     listRes[i][k] = v
@@ -153,6 +153,23 @@ class Neo4JCrime(object):
 
         return self.result_as_list(result)
 
+    # SELECCIONAR PROPIEDADES (RELACION)
+    """
+        Método que devuelve todas las posibles propiedades para un nodo.
+        El argumento es obligatorio.
+    """
+    def select_relationship_properties(self,name):
+
+        result = None
+        name = f':{name}' if name is not None else ''
+
+        query = f"MATCH (N)-[R{name}]->(C) RETURN DISTINCT keys(R) as properties"
+
+        with self._driver.session() as session:
+            result = session.read_transaction(self.select_nodes_custom,query)
+
+        return self.result_as_list(result)
+
     # SELECCIONAR LABELS
     """
         Método que devuelve todos los labels disponibles para los nodos.
@@ -185,6 +202,15 @@ class Neo4JCrime(object):
 
         return self.result_as_list(result)
 
+    # SELECCIONAR QUE DEVUELVE EL RESULTADO ORIGINAL TIPIFICADO
+    def select_custom_original(self,query):
+        result = None
+
+        with self._driver.session() as session:
+            result = session.read_transaction(self.select_nodes_custom,query)
+
+        return result
+
 # INSERTAR UNO
 
 # INSERTAR VARIOS
@@ -194,55 +220,3 @@ class Neo4JCrime(object):
 # BORRAR UNO
 
 # ACTUALIZAR
-
-
-
-
-try:
-    h = Neo4JCrime('bolt://localhost:7687','test','4321')
-
-    var = h.select_count()
-
-    print(var)
-
-    var = h.select_limit('CATEGORY',6)
-
-    print(var)
-
-    var = h.select_custom('MATCH (N:CATEGORY) RETURN N LIMIT 10')
-
-    for i in range(0,len(var)):
-        for k,v in var[i].items():
-            print(k,'->',v)
-
-
-    var = h.select_custom('MATCH (N:INCIDENT)-[R]->(C) RETURN N,R,C LIMIT 10')
-
-    for i in range(0,len(var)):
-        print(var[i])
-        """
-        for k,v in var[i].items():
-            print(k,'->',v)
-        """
-    var = h.select_relationship_kind()
-
-    print(var)
-
-    var = h.select_node_labels()
-
-    print(var)
-
-    temp = var;
-
-    for x in iter(temp):
-        for k,v in x.items():
-            var = h.select_node_properties(v[0])
-
-            print(var)
-
-
-
-except Exception as e:
-    print(e)
-
-#input('Press ENTER to exit')
