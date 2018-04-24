@@ -1,19 +1,17 @@
 # Fase II: Análisis de datos con Python
 
-* [Introducción](#introducción)
-* [Conectores](#conectores)
+* [Introducción](#introducción-de-los-conectores)
   * [Cassandra](cassandra/README.md)
   * [Mongodb](mongodb/readme.md)
   * [Neo4j](neo4j/readme.md)
-* [Vistas](#vistas)
-
+* [Consultas, vistas y representaciones gráficas](#vistas)
 * Notebooks
   * [Cassandra](cassandra/Analisis-Cassandra.html) [descarga](cassandra/Analisis-Cassandra.ipynb)
   * [Mongodb](mongodb/Analisis-Mongodb.html) [descarga](mongodb/Analisis-Mongodb.ipynb)
   * [Neo4j](neo4j/Analisis-Neo4j.html) [descarga](neo4j/Analisis-Neo4j.ipynb)
 ----
 
-## Introducción
+## Introducción de los conectores
 
 A continuación disponemos de una pequeña explicación de los conectores usados y las ventajas por las capacidades que ofrecen o por la naturaleza de la base de datos. 
 
@@ -23,27 +21,14 @@ A continuación disponemos de una pequeña explicación de los conectores usados
 una conexión encapsulada en el objeto _Session_. Se pueden añadir ciertas configuraciones en acorde a la arquictura definida o a la forma 
 de conexión: 
 
-Ventajas:
-
-  * Permite balanceo de carga entre los nodos disponibles
-  * Pool de threads para conexiones
-  * Permite añadir una capa de seguridad
-
-Toda esta información esta reflejada en el documento oficial que podemos encontrar bajo [https://datastax.github.io/python-driver/api/cassandra/cluster.html]].
+Toda esta información esta reflejada en el documento oficial que podemos encontrar bajo https://datastax.github.io/python-driver/api/cassandra/cluster.html.
 
 ### Mongodb
 
 El paquete *pymongo* contiene herramientas para trabajar desde Python con MongoDb. La estructura de los datos en documentos tipo JSON con un esquema dinámico llamado BSON, lo que implica que no existe un esquema predefinido. Los elementos de los datos se denominan documentos y se guardan en colecciones
 A parte del manejo de datos, la librería permite realizar:
 
-Más información de la libreria: [[https://api.mongodb.com/python/current/index.html]]
-
-Ventajas:
-
-  * Permite añadir una capa de seguridad
-  * Capacidad de manejo de datos en formatos de documentos, con capacidad dinámica.
-  * Capacidad de transformación de tipos de datos, sobre todo fechas.
-  * Añade geoespacialidad para los datos relacionados con las coordenadas
+Más información de la libreria: https://api.mongodb.com/python/current/index.html
 
 ### Neo4j
 
