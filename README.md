@@ -2,19 +2,21 @@
 
 ## Projects
 
-* I. [Procesamiento](Procesamiento/readme.md)
+* I. *[Procesamiento](Procesamiento/readme.md)*
   * [Cassandra](Procesamiento/cassandra)
   * [Mongodb](Procesamiento/mongodb)
   * [Neo4j](Procesamiento/neo4j)
   * [Cpp](Procesamiento/processorcpp)
-* II. Implementación y analisis
+
+* II. *[Implementación y analisis](Analisis/readme.md)*
   * [Cassandra](Analisis/cassandra)
   * [Mongodb](Analisis/mongodb)
   * [Neo4j](Analisis/neo4j)
-* III. Visualización
 
+* III. *Visualización*
 
 ## I. Procesamiento
+
 Programa C++ que realice el mismo procesamiento directamente leyendo de fichero de datos.
 
 * Almacenamiento de los datos.
@@ -26,8 +28,6 @@ Programa C++ que realice el mismo procesamiento directamente leyendo de fichero 
 * Cassandra
 * Neo4j
 * Mongodb
-
-
 
 ## II. Análisis y representación
 
