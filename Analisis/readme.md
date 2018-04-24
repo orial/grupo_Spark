@@ -2,19 +2,22 @@
 
 * [Introducción](#introducción)
 * [Conectores](#conectores)
+  * [Cassandra](cassandra/README.MD)
+  * [Mongodb](mongodb/README.MD)
+  * [Neo4j](neo4j/README.MD)
 * [Vistas](#vistas)
 
 * Notebooks
   * [Cassandra](cassandra/Analisis-Cassandra.html) [descarga](cassandra/Analisis-Cassandra.ipynb)
-  * [Mongodb](cassandra/Analisis-Mongodb.html) [descarga](cassandra/Analisis-Mongodb.ipynb)
-  * [Neo4j](cassandra/Analisis-Neo4j.html) [descarga](cassandra/Analisis-Neo4j.ipynb)
+  * [Mongodb](mongodb/Analisis-Mongodb.html) [descarga](cassandra/Analisis-Mongodb.ipynb)
+  * [Neo4j](neo4j/Analisis-Neo4j.html) [descarga](cassandra/Analisis-Neo4j.ipynb)
 ----
 
 ## Introducción
 
 A continuación disponemos de una pequeña explicación de los conectores usados y las ventajas por las capacidades que ofrecen o por la naturaleza de la base de datos. 
 
-### Cassandra
+### Cassandra
 
 *cassandra.cluster*. Contiene una clase principal denominada *Cluster* que se conecta a un cluster de Cassandra estableciendo
 una conexión encapsulada en el objeto _Session_. Se pueden añadir ciertas configuraciones en acorde a la arquictura definida o a la forma 
@@ -27,7 +30,7 @@ Ventajas:
 
 Toda esta información esta reflejada en el documento oficial que podemos encontrar bajo [https://datastax.github.io/python-driver/api/cassandra/cluster.html]].
 
-### Mongodb
+### Mongodb
 
 El paquete *pymongo* contiene herramientas para trabajar desde Python con MongoDb. La estructura de los datos en documentos tipo JSON con un esquema dinámico llamado BSON, lo que implica que no existe un esquema predefinido. Los elementos de los datos se denominan documentos y se guardan en colecciones
 A parte del manejo de datos, la librería permite realizar:
@@ -43,7 +46,11 @@ Ventajas:
 
 ### Neo4j
 
-## Representaciones
+
+...
+
+
+## Representaciones
 
 Hemos generalizado los tipos de consultas dependendiendo a las expectativas sobre la aplicación, 
 todas ellas se encuentran reflejadas como tablas y algunas representaciones gráficas para formar
@@ -53,7 +60,7 @@ las correspondientes consultas:
 * Actividad criminal por zona / Numero de incidencias
 * Actividad criminal por tipo de delito / Nùmero de incidencias
 
-![](porzonacategoria.png)
+![](docs/porzonacategoria.png)
 
 Todas se pueden encontrar implementadas en el notebook correspondiente a cada tipo de base de datos:
 
