@@ -2,15 +2,15 @@
 
 * [Introducción](#introducción)
 * [Conectores](#conectores)
-  * [Cassandra](cassandra/README.MD)
-  * [Mongodb](mongodb/README.MD)
-  * [Neo4j](neo4j/README.MD)
+  * [Cassandra](cassandra/README.md)
+  * [Mongodb](mongodb/readme.md)
+  * [Neo4j](neo4j/readme.md)
 * [Vistas](#vistas)
 
 * Notebooks
   * [Cassandra](cassandra/Analisis-Cassandra.html) [descarga](cassandra/Analisis-Cassandra.ipynb)
-  * [Mongodb](mongodb/Analisis-Mongodb.html) [descarga](cassandra/Analisis-Mongodb.ipynb)
-  * [Neo4j](neo4j/Analisis-Neo4j.html) [descarga](cassandra/Analisis-Neo4j.ipynb)
+  * [Mongodb](mongodb/Analisis-Mongodb.html) [descarga](mongodb/Analisis-Mongodb.ipynb)
+  * [Neo4j](neo4j/Analisis-Neo4j.html) [descarga](neo4j/Analisis-Neo4j.ipynb)
 ----
 
 ## Introducción
@@ -24,6 +24,7 @@ una conexión encapsulada en el objeto _Session_. Se pueden añadir ciertas conf
 de conexión: 
 
 Ventajas:
+
   * Permite balanceo de carga entre los nodos disponibles
   * Pool de threads para conexiones
   * Permite añadir una capa de seguridad
@@ -46,8 +47,7 @@ Ventajas:
 
 ### Neo4j
 
-
-...
+El conector _neo4j-driver_está basado en el driver oficial de Neo4J para Python. Esto ha implicado una transformación de las funciones por defecto para poder obtener resultados que sean útiles más tarde para nuestra aplicación.
 
 
 ## Representaciones

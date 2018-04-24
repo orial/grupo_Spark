@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'bootstrap3',
     'rest_framework',
     'django_tables2',
     'webapp.apps.WebappConfig',

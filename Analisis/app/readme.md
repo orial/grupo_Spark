@@ -17,8 +17,10 @@ app(master)  python manage.py runserver
 
 source venv/bin/activate
 
-
 # Referencias
 
 Neo4j http://0-proquestcombo.safaribooksonline.com.jabega.uma.es/book/programming/python/9781783983988/exploring-the-py2neo-apis/ch04lvl2sec40_html#X2ludGVybmFsX0h0bWxWaWV3P3htbGlkPTk3ODE3ODM5ODM5ODglMkZjaDA3bHZsMnNlYzU1X2h0bWwmcXVlcnk9
 
+Bootstrap + django: https://github.com/dyve/django-bootstrap3/tree/master/demo/demo/templates/demo
+
+Multidatabase: https://docs.djangoproject.com/en/dev/topics/db/multi-db/

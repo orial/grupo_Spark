@@ -11,6 +11,7 @@ router.register(r'incidents', views.IncidentList)
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
+    url(r'^home', views.HomeView.as_view(), name='home'),
     url(r'^all/', views.overall, name='incidents'),
     url(r'^api/', include('rest_framework.urls'))
 ]

@@ -3,6 +3,7 @@ from neo4j.v1 import GraphDatabase
 
 class Neo4JConnector(object):
 
+    """Neo4j class connector representative class. Makes the connection with the database """
     def __init__(self, uri, user, password):
         self._driver = GraphDatabase.driver(uri, auth=(user, password))
 
@@ -210,13 +211,3 @@ class Neo4JConnector(object):
             result = session.read_transaction(self.select_nodes_custom,query)
 
         return result
-
-# INSERTAR UNO
-
-# INSERTAR VARIOS
-
-# BORRAR
-
-# BORRAR UNO
-
-# ACTUALIZAR
