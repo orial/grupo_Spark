@@ -1,4 +1,6 @@
 
+Basicamente la vista principal contiene una interacción con los datos estáticos de los datos actuales, los cuales podemos afinar con respecto a un filtro de **rango de fechas**.
+
 
 ![](maqueta_statico.png)
 
