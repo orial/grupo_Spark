@@ -7,6 +7,7 @@ una conexión encapsulada en el objeto _Session_. Se pueden añadir ciertas conf
 de conexión: 
 
 Ventajas:
+
   * Permite balanceo de carga entre los nodos disponibles
   * Pool de threads para conexiones
   * Permite añadir una capa de seguridad
@@ -19,10 +20,11 @@ y se encuentran alojados bajo un informe (notebook) creado con la herramienta Ju
 * [Notebook](Analisis-Cassandra.ipynb)
 * [Salida formato html](Analisis-Cassandra.html) / [pdf](Analisis-Cassandra.pdf)
 
-## Configuración e instalación del conector
+## Configuración e instalación del conector / compatibilidad con Django
 
 ```
 pip install cassandra-driver
+pip install django-cassandra-engine
 ```
 
 ### Macos
@@ -52,4 +54,4 @@ Summarizing, the cassandra-migrate tool has the following features:
 
 https://www.slothparadise.com/how-to-install-and-use-cassandra-on-django/
 
-pip install django-cassandra-engine
+```
