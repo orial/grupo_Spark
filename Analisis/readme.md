@@ -65,8 +65,8 @@ las correspondientes consultas:
 Todas se pueden encontrar implementadas en el notebook correspondiente a cada tipo de base de datos:
 
 * [Cassandra](cassandra/Analisis-Cassandra.html) [descarga](cassandra/Analisis-Cassandra.ipynb)
-* [Mongodb](cassandra/Analisis-Mongodb.html) [descarga](cassandra/Analisis-Mongodb.ipynb)
-* [Neo4j](cassandra/Analisis-Neo4j.html) [descarga](cassandra/Analisis-Neo4j.ipynb)
+* [Mongodb](mongodb/Analisis-Mongodb.html) [descarga](mongodb/Analisis-Mongodb.ipynb)
+* [Neo4j](neo4j/Analisis-Neo4j.html) [descarga](neo4j/Analisis-Neo4j.ipynb)
 
 ## Referencias
 
