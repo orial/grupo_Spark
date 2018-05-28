@@ -104,6 +104,6 @@ Todas se pueden encontrar implementadas bajo:
 
 ## Colaboración
 
-* Julio _(@melferas)_
+* Julio Sorroche García _(@melferas)_
 * Lupicinio García Ortiz _(@orial)_
 * Álvaro López _(@vrandkode)_
