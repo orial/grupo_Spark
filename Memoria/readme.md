@@ -1,5 +1,5 @@
 
-## Introducción (a modo de Motivacional?) **ALVARO**
+HECHO ---> ## Introducción (a modo de Motivacional?) **ALVARO**
 
 - Dataset de crimenes. significado como es la estrucutura de la información de como hemos realizado la descarga y cuales han sido las pautas que hemos seguido para el preprocesamiento.
 
@@ -11,28 +11,37 @@ Antecedentes: de como se ha manejado el dataset en otros proyectos ajenos al nue
 
 Actual: de como lo manejan ellos actualmente?
 
-## Fundamentos teórico/prácticos del Trabajo/Desarrollo
+## Fundamentos teórico/prácticos del Trabajo/Desarrollo **ALVARO**
 
-Bloque a. Estructura de datos
-Teoría (por tecnologia): desglose de  teoría por tecnología: estructura de datos, como se manejan las consultas, requerimientos para despliegue?
+- PARA CADA TECNOLOGIA (PARTE HECHA)
+   ESTRUCTURA DE DATOS( PARTE HECHA)
 
-Bloque b. Machine learning
+- PYTHON. MODELADO DE DATOS.
+   CONNECTORS PARA CADA TECNOLOGIA
 
-Teoria: 3 modelos elegidos
+- PYTHON Y MACHINE LEARNING
+   PARA CADA MODELO QUE LIBRERIAS SE HAN USADO?
+  
+
+
 
 ## Aportaciones 
+
 
 con respecto, nuestra estructura da datos sobre crimenes??
 
 ## Resultados. **ALVARO**
 
-Bloque a. Estructura de datos
+- PARA CADA TECNOLOGIA (PARTE HECHA)
+   ESTRUCTURA DE DATOS( PARTE HECHA)
+   CONSULTAS (PARTE HECHA) - CONSULTAS EN PYTHON (ME FALTA)
+   GRAFICOS (FALTA ****)
 
-Desarrollo (por tecnologia): estructura de datos sobre el dataset, consultas obtenidas
+(todo lo de abajo falta)
+- PYTHON Y MACHINE LEARNING
+   CADA MODELo
+   AJUSTE DE CADA MODELO (resultado)
 
-Bloque b. Machine learning
-
-Desarrollo: 3 modelos aplicados al dataset
 
 ## Conclusiones y Trabajos Futuros 
 
