@@ -10,9 +10,9 @@ A este nivel encontramos tres documentos que representan a las funciones que per
 y se encuentran alojados bajo un informe (notebook) creado con la herramienta Jupyter.
 
 * [Notebook](Analisis-Neo4j.ipynb)
-* [Salida formato html](Analisis-Neo4j.html))
+* [Salida formato html](Analisis-Neo4j.html)
 
-## Conexión con Django models
+## Conexión con Django models
 
 Para la conexión del driver con la aplicación de Django necesitamos la reprenstación herdada del modelo,
 para ello con ayuda la definición del conector en [[neo4jConnector.py]] en la siguiente fase se llevará a cabo.
