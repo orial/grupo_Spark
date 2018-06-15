@@ -11,8 +11,8 @@
     * Clustering
     * Neural networks
 * Resultados
-  * Acesso a la información (consultas y vistas)
+  * ~~Acesso a la información (consultas y vistas)~~
   * Ajuste de modelos de clasificación
 * Conclusión
- * Mejor tecnología
- * Mejor ajuste
+  * Mejor tecnología
+  * Mejor ajuste
