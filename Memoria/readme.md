@@ -1,7 +1,7 @@
 
-* ~~Introduccion
-  * I. dataset
-  * II. fases~~
+* ~~Introduccion~~
+ ~~ * I. dataset~~
+ ~~ * II. fases~~
 * Contextulizacion del trabajo.Antecedentes: de como se ha manejado el dataset en otros proyectos ajenos al nuestro? Actual: de como lo manejan ellos actualmente?
   * I. antecedentes
   * II. proyectos en la actualidad
