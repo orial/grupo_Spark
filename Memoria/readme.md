@@ -23,18 +23,20 @@
 * Resultados: Analisis y procesamiento de datos
   * ~~Metodologia~~
   * ~~Origen y fuente de datos~~
-    * Analisis de la fuente y descarga
-    * Descarga
-  * Preprocesamiento e importación de datos
-    * Cassandra
-      * Importacion de datos
-      * Estructura de la información
-    * Mongodb
-      * Importacion de datos
-      * Estructura de la información
-    * Neo4j
-      * Importacion de datos
-      * Estructura de la información
+    * ~~Analisis de la fuente y descarga~~
+    * ~~Descarga~~
+    * Resultado final de los dataset - google cloud storage
+  *  ~~Preprocesamiento e importación de datos ~~
+    *  ~~Cassandra ~~
+      *  ~~Importacion de datos ~~
+      *  ~~Estructura de la información ~~
+    *  ~~Mongodb ~~
+      *  ~~Importacion de datos ~~
+      *  ~~Estructura de la información ~~
+    *  ~~Neo4j ~~
+      *  ~~Importacion de datos ~~
+      *  ~~Estructura de la información ~~
+    * Comparativa vs Procesamiento cpp (rubrica) analisis
  * Resultados: Representación de la información
    * Consultas y vistas
     * Cassandra
