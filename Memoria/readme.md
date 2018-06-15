@@ -8,8 +8,8 @@
 * Fundamentos teoricos/practicos
   * Estructura y arquitectura de la informacion
     * ~~Cassandra~~
-      * Estructura de datos
-      * Arquitectura
+      * ~~Estructura de datos~~
+      * ~~Arquitectura~~
     * neo4j
       * Estructura de datos
       * Arquitectura
