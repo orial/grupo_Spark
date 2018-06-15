@@ -1,13 +1,13 @@
 
 * ~~Introduccion~~
- ~~ * I. dataset~~
- ~~ * II. fases~~
+ * I. ~~dataset~~
+ * II. ~~fases~~
 * Contextulizacion del trabajo.Antecedentes: de como se ha manejado el dataset en otros proyectos ajenos al nuestro? Actual: de como lo manejan ellos actualmente?
   * I. antecedentes
   * II. proyectos en la actualidad
 * Fundamentos teoricos/practicos
   * Estructura y arquitectura de la informacion
-    ~~* Cassandra~~
+    * ~~Cassandra~~
       * Estructura de datos
       * Arquitectura
     * neo4j
@@ -16,13 +16,13 @@
     * mongodb
       * Estructura de datos
       * Arquitectura
-    ~~* comparativa (rubrica)~~
-  ~~* Conexión a la estructura de la informacion: conectores~~
+    * ~~comparativa (rubrica)~~
+  * ~~Conexión a la estructura de la informacion: conectores~~
     * Requerimientos comunes
     * Comparativa (rubrica)
 * Resultados: Analisis y procesamiento de datos
-  ~~* Metodologia~~
-  ~~* Origen y fuente de datos~~
+  * ~~Metodologia~~
+  * ~~Origen y fuente de datos~~
     * Analisis de la fuente y descarga
     * Descarga
   * Preprocesamiento e importación de datos
